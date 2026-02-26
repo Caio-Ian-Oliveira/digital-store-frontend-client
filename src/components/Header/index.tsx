@@ -1,19 +1,21 @@
-import { Menu, Search } from 'lucide-react'
-import { useCallback, useState } from 'react'
-import { NavLink, useLocation, useNavigate } from 'react-router-dom'
-import RouterLink from '@/components/RouterLink'
 import logoHeader from '@/assets/logo-header.svg'
 import miniCart from '@/assets/mini-cart.svg'
 import CartModal from '@/components/CartModal'
+import RouterLink from '@/components/RouterLink'
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger
 } from '@/components/ui/sheet'
+import { useAuth } from '@/contexts/AuthContext'
 import { useCart } from '@/contexts/CartContext'
+import { Menu, Search } from 'lucide-react'
+import { useCallback, useState } from 'react'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import Logo from '../Logo'
+import { UserProfileMenu } from './UserProfileMenu'
 
 const Header = () => {
   const [searchTerm, setSearchTerm] = useState('')
@@ -23,11 +25,12 @@ const Header = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const { itemCount } = useCart()
+  const { user, isAuthenticated } = useAuth()
 
   const isAuthPage =
-    location.pathname === '/cadastro' ||
-    location.pathname === '/login' ||
-    location.pathname === '/register-form-page'
+    location.pathname === '/cadastro'
+    || location.pathname === '/login'
+    || location.pathname === '/register-form-page'
 
   const toggleCartModal = useCallback(() => {
     setCartModalOpen((prev) => !prev)
@@ -173,20 +176,36 @@ const Header = () => {
 
                 {/* Área de Autenticação */}
                 <div className="p-5 space-y-4 mt-auto">
-                  <RouterLink
-                    to="/login"
-                    className="w-full h-12 bg-primary text-white text-base font-bold rounded-lg flex items-center justify-center hover:bg-tertiary active:brightness-90 transition-all"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Entrar
-                  </RouterLink>
-                  <RouterLink
-                    to="/cadastro"
-                    className="block text-center text-base text-dark-gray-2 underline hover:text-primary transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Cadastre-se
-                  </RouterLink>
+                  {isAuthenticated ? (
+                    <div className="flex flex-col gap-4">
+                      <span className="block text-center text-base text-dark-gray-2 font-medium">
+                        Olá, {user?.firstname}!
+                      </span>
+                      {/* Note: The main logout logic is now only inside UserProfileMenu.
+                          For mobile, we will simply use the Desktop's UserProfileMenu or mimic its visual
+                          for now, we'll mount the complete UserProfileMenu inside this container. */}
+                      <div className="flex justify-center">
+                        <UserProfileMenu />
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <RouterLink
+                        to="/login"
+                        className="w-full h-12 bg-primary text-white text-base font-bold rounded-lg flex items-center justify-center hover:bg-tertiary active:brightness-90 transition-all"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Entrar
+                      </RouterLink>
+                      <RouterLink
+                        to="/cadastro"
+                        className="block text-center text-base text-dark-gray-2 underline hover:text-primary transition-colors"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Cadastre-se
+                      </RouterLink>
+                    </>
+                  )}
                 </div>
               </SheetContent>
             </Sheet>
@@ -293,18 +312,24 @@ const Header = () => {
             </div>
           ) : (
             <div className="flex items-center gap-6">
-              <RouterLink
-                to="/cadastro"
-                className="text-base text-dark-gray-2 underline"
-              >
-                Cadastre-se
-              </RouterLink>
-              <RouterLink
-                to="/login"
-                className="w-[114px] h-10 bg-primary text-white text-sm font-bold rounded flex items-center justify-center"
-              >
-                Entrar
-              </RouterLink>
+              {isAuthenticated ? (
+                <UserProfileMenu />
+              ) : (
+                <>
+                  <RouterLink
+                    to="/cadastro"
+                    className="text-base text-dark-gray-2 underline"
+                  >
+                    Cadastre-se
+                  </RouterLink>
+                  <RouterLink
+                    to="/login"
+                    className="w-[114px] h-10 bg-primary text-white text-sm font-bold rounded flex items-center justify-center"
+                  >
+                    Entrar
+                  </RouterLink>
+                </>
+              )}
               <div className="relative">
                 <button
                   type="button"

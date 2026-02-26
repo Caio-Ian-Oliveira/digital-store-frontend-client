@@ -1,0 +1,61 @@
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+
+export interface User {
+  id: string
+  firstname: string
+  surname: string
+  cpf: string
+  phone: string
+  email: string
+}
+
+interface AuthContextType {
+  user: User | null
+  setUser: (user: User | null) => void
+  isAuthenticated: boolean
+  logout: () => void
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined)
+
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<User | null>(() => {
+    // Tenta recuperar os dados do usuário do localStorage ao inicializar
+    const storedUser = localStorage.getItem('@DigitalStore:user')
+    if (storedUser) {
+      try {
+        return JSON.parse(storedUser)
+      } catch {
+        return null
+      }
+    }
+    return null
+  })
+
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('@DigitalStore:user', JSON.stringify(user))
+    } else {
+      localStorage.removeItem('@DigitalStore:user')
+    }
+  }, [user])
+
+  const logout = () => {
+    setUser(null)
+    localStorage.removeItem('@DigitalStore:user')
+  }
+
+  return (
+    <AuthContext.Provider value={{ user, setUser, isAuthenticated: !!user, logout }}>
+      {children}
+    </AuthContext.Provider>
+  )
+}
+
+export const useAuth = () => {
+  const context = useContext(AuthContext)
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider')
+  }
+  return context
+}

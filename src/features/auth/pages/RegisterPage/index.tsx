@@ -1,13 +1,15 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import RouterLink from '@/components/RouterLink'
 
 const RegisterPage = () => {
   const [email, setEmail] = useState('')
+  const navigate = useNavigate()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: implement registration logic
-    console.log('Register with:', email)
+    // Navigate programmatically passing the email via router state
+    navigate('/register-form-page', { state: { email } })
   }
 
   return (
@@ -67,9 +69,9 @@ const RegisterPage = () => {
               {/* Submit button */}
               <button
                 type="submit"
-                className="h-11 w-full bg-primary text-white font-semibold rounded-md hover:brightness-90 transition-all cursor-pointer"
+                className="h-11 w-full flex items-center justify-center bg-primary text-white font-semibold rounded-md hover:brightness-90 transition-all cursor-pointer"
               >
-                <RouterLink to="/register-form-page">Criar Conta</RouterLink>
+                Criar Conta
               </button>
             </form>
 

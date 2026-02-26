@@ -1,13 +1,47 @@
-import { useState } from 'react'
 import RouterLink from '@/components/RouterLink'
+import { useAuth } from '@/contexts/AuthContext'
+import { zodResolver } from '@hookform/resolvers/zod'
+import axios from 'axios'
+import { Loader2 } from 'lucide-react'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
+import { useLoginMutation } from '../../queries/useLoginMutation'
+import { type LoginFormData, loginSchema } from '../../utils/loginSchema'
 
 const LoginPage = () => {
-  const [login, setLogin] = useState('')
-  const [senha, setSenha] = useState('')
+  const navigate = useNavigate()
+  const { setUser } = useAuth()
+  const [generalError, setGeneralError] = useState<string | null>(null)
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log('Login with:', { login, senha })
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: { email: '', password: '' }
+  })
+
+  const { mutateAsync: login, isPending: loading } = useLoginMutation()
+
+  const onSubmit = async (data: LoginFormData) => {
+    setGeneralError(null)
+    try {
+      const response = await login(data)
+      // Save user to context and localStorage
+      if (response && response.user) {
+        setUser(response.user)
+      }
+      // Login concluded via HttpOnly cookie setup automatically
+      navigate('/')
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        setGeneralError('Email ou senha inválidos')
+      } else {
+        setGeneralError('Ocorreu um erro no servidor. Tente novamente.')
+      }
+    }
   }
 
   return (
@@ -45,7 +79,16 @@ const LoginPage = () => {
             </p>
 
             {/* Formulário de login */}
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="flex flex-col gap-5"
+            >
+              {generalError && (
+                <div className="p-3 rounded-md bg-red-50 border border-[#C92071]/20 text-[#C92071] text-sm">
+                  {generalError}
+                </div>
+              )}
+
               {/* Campo Login */}
               <div className="flex flex-col gap-1.5">
                 <label
@@ -56,13 +99,17 @@ const LoginPage = () => {
                 </label>
                 <input
                   id="login-field"
-                  type="text"
-                  required
+                  type="email"
                   placeholder="Insira seu login ou email"
-                  value={login}
-                  onChange={(e) => setLogin(e.target.value)}
-                  className="h-11 rounded-md bg-light-gray-3 border-none px-3 text-sm text-dark-gray placeholder:text-light-gray outline-none focus:ring-2 focus:ring-primary/30 transition-all"
+                  disabled={loading}
+                  {...register('email')}
+                  className={`h-11 rounded-md bg-light-gray-3 border-none px-3 text-sm text-dark-gray placeholder:text-light-gray outline-none focus:ring-2 focus:ring-primary/30 transition-all ${errors.email ? 'ring-2 ring-[#C92071]/50 bg-[#C92071]/5' : ''}`}
                 />
+                {errors.email && (
+                  <span className="text-xs text-[#C92071]">
+                    {errors.email.message}
+                  </span>
+                )}
               </div>
 
               {/* Campo Senha */}
@@ -76,12 +123,16 @@ const LoginPage = () => {
                 <input
                   id="senha-field"
                   type="password"
-                  required
                   placeholder="Insira sua senha"
-                  value={senha}
-                  onChange={(e) => setSenha(e.target.value)}
-                  className="h-11 rounded-md bg-light-gray-3 border-none px-3 text-sm text-dark-gray placeholder:text-light-gray outline-none focus:ring-2 focus:ring-primary/30 transition-all"
+                  disabled={loading}
+                  {...register('password')}
+                  className={`h-11 rounded-md bg-light-gray-3 border-none px-3 text-sm text-dark-gray placeholder:text-light-gray outline-none focus:ring-2 focus:ring-primary/30 transition-all ${errors.password ? 'ring-2 ring-[#C92071]/50 bg-[#C92071]/5' : ''}`}
                 />
+                {errors.password && (
+                  <span className="text-xs text-[#C92071]">
+                    {errors.password.message}
+                  </span>
+                )}
               </div>
 
               {/* Link "Esqueci minha senha" */}
@@ -95,9 +146,14 @@ const LoginPage = () => {
               {/* Botão principal de login */}
               <button
                 type="submit"
-                className="h-11 w-full bg-primary text-white font-semibold rounded-md hover:brightness-90 transition-all cursor-pointer"
+                disabled={loading}
+                className="h-11 w-full bg-primary text-white font-semibold flex justify-center items-center rounded-md hover:brightness-90 transition-all cursor-pointer disabled:opacity-50"
               >
-                Acessar Conta
+                {loading ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  'Acessar Conta'
+                )}
               </button>
             </form>
 
