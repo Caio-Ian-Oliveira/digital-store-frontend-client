@@ -57,7 +57,7 @@ const Header = () => {
     }`
 
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-40">
+    <header className="bg-white sticky top-0 z-40 shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
       {/* Mobile Header - altura 56px */}
       <div className="lg:hidden h-14 flex items-center justify-between px-4">
         {isAuthPage ? (
@@ -277,7 +277,7 @@ const Header = () => {
       )}
 
       {/* Desktop Header */}
-      <div className="hidden lg:block py-3 bg-white">
+      <div className="hidden lg:block py-6 bg-white">
         <div className="max-w-[1440px] mx-auto px-6 xl:px-[100px] flex items-center gap-10">
           <Logo />
           {!isAuthPage && (
@@ -287,10 +287,10 @@ const Header = () => {
             >
               <input
                 type="text"
-                placeholder="Pesquisar produto..."
+                placeholder="Tênis"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full h-[60px] px-5 pr-12 rounded-lg bg-light-gray-3 text-base text-dark-gray-2 placeholder:text-light-gray-2 outline-none"
+                className="w-full h-[52px] px-5 pr-12 rounded-lg bg-light-gray-3 text-base text-dark-gray-2 placeholder:text-light-gray-2 outline-none"
               />
               <button
                 type="submit"
@@ -311,25 +311,7 @@ const Header = () => {
               </RouterLink>
             </div>
           ) : (
-            <div className="flex items-center gap-6">
-              {isAuthenticated ? (
-                <UserProfileMenu />
-              ) : (
-                <>
-                  <RouterLink
-                    to="/cadastro"
-                    className="text-base text-dark-gray-2 underline"
-                  >
-                    Cadastre-se
-                  </RouterLink>
-                  <RouterLink
-                    to="/login"
-                    className="w-[114px] h-10 bg-primary text-white text-sm font-bold rounded flex items-center justify-center"
-                  >
-                    Entrar
-                  </RouterLink>
-                </>
-              )}
+            <div className="flex items-center gap-5">
               <div className="relative">
                 <button
                   type="button"
@@ -350,6 +332,24 @@ const Header = () => {
                 </button>
                 <CartModal isOpen={cartModalOpen} onClose={closeCartModal} />
               </div>
+              {isAuthenticated ? (
+                <UserProfileMenu />
+              ) : (
+                <>
+                  <RouterLink
+                    to="/cadastro"
+                    className="text-base text-dark-gray-2 underline"
+                  >
+                    Cadastre-se
+                  </RouterLink>
+                  <RouterLink
+                    to="/login"
+                    className="w-[114px] h-10 bg-primary text-white text-sm font-bold rounded flex items-center justify-center"
+                  >
+                    Entrar
+                  </RouterLink>
+                </>
+              )}
             </div>
           )}
         </div>
@@ -357,8 +357,8 @@ const Header = () => {
 
       {/* Desktop Navigation - hidden on auth pages */}
       {!isAuthPage && (
-        <nav className="hidden lg:block border-t border-light-gray-3 bg-white">
-          <div className="max-w-[1440px] mx-auto px-6 xl:px-[100px] flex gap-[60px]">
+        <nav className="hidden lg:block bg-white">
+          <div className="max-w-[1440px] mx-auto px-6 xl:px-[100px] flex gap-8">
             <NavLink to="/" className={navLinkClassName}>
               Home
             </NavLink>

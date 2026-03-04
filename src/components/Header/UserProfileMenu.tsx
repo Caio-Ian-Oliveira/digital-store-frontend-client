@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/dialog'
 import { useAuth } from '@/contexts/AuthContext'
 import { useLogoutMutation } from '@/features/auth/queries/useLogoutMutation'
-import { ChevronDown, LogOut } from 'lucide-react'
+import { LogOut, User } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -21,11 +21,6 @@ export const UserProfileMenu = () => {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false)
   
   const menuRef = useRef<HTMLDivElement>(null)
-
-  // Recupera as iniciais
-  const initials = user
-    ? `${user.firstname.charAt(0)}${user.surname.charAt(0)}`.toUpperCase()
-    : ':)'
 
   // Fecha o menu se clicar fora
   useEffect(() => {
@@ -61,20 +56,11 @@ export const UserProfileMenu = () => {
   return (
     <>
       <div className="relative flex items-center gap-2 cursor-pointer" ref={menuRef} onClick={() => setIsMenuOpen(!isMenuOpen)}>
-        {/* Avatar Button */}
-        <button
-          type="button"
-          className="w-10 h-10 rounded-full bg-primary text-white font-bold text-sm tracking-wide flex items-center justify-center hover:brightness-110 shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/50"
-          aria-expanded={isMenuOpen}
-          aria-label="Abrir menu do usuário"
-        >
-          {initials}
-        </button>
-        {/* Seta reativa */}
-        <ChevronDown 
-          size={16} 
-          className={`text-dark-gray-2 transition-transform duration-200 ${isMenuOpen ? 'rotate-180' : ''}`} 
-        />
+        {/* User Icon + Greeting */}
+        <User size={22} className="text-dark-gray-2" />
+        <span className="text-sm font-medium text-dark-gray-2 whitespace-nowrap">
+          Olá {user?.firstname}
+        </span>
 
         {/* Dropdown Menu */}
         {isMenuOpen && (

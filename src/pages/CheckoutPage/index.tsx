@@ -298,8 +298,8 @@ export default function CheckoutPage() {
 
       {/* Two Column Layout */}
       <div className="flex flex-col lg:flex-row gap-8">
-        {/* Left Column - Forms (65-70%) */}
-        <div className="w-full lg:w-[65%]">
+        {/* Left Column - Forms */}
+        <div className="w-full lg:flex-1 lg:min-w-0">
           <form id="checkout-form" onSubmit={handleSubmit(onSubmit)}>
             {/* Block 1 - Personal Information */}
             <div className="bg-white rounded-lg p-0 lg:p-6 mb-6">
@@ -510,6 +510,14 @@ export default function CheckoutPage() {
                        </p>
                     </div>
                   )}
+
+                  {paymentMethod === 'boleto' && (
+                    <div className="space-y-5 pt-2">
+                       <p className="text-sm text-light-gray-2 bg-light-gray-3 p-4 rounded-lg text-center font-medium">
+                         🏦 Ambiente de Demonstração! <br/> O boleto será gerado automaticamente após a confirmação do pedido. Nenhum pagamento real será processado.
+                       </p>
+                    </div>
+                  )}
                 </div>
               </Section>
             </div>
@@ -550,7 +558,7 @@ export default function CheckoutPage() {
         </div>
 
         {/* Right Column - Order Summary (Desktop only) */}
-        <div className="hidden lg:block lg:w-[35%]">
+        <div className="hidden lg:block lg:w-[340px] shrink-0">
           <div className="bg-white rounded-lg shadow-sm p-6 lg:sticky lg:top-6">
             <h2 className="text-lg font-bold text-dark-gray-2 mb-6 uppercase">
               RESUMO

@@ -7,6 +7,10 @@ import CartPage from '@/pages/CartPage'
 import CheckoutPage from '@/pages/CheckoutPage'
 import HomePage from '@/pages/HomePage'
 import Layout from '@/pages/Layout'
+import MyInfoPage from '@/pages/MyInfoPage'
+import MyOrdersPage from '@/pages/MyOrdersPage'
+import MyPaymentMethodsPage from '@/pages/MyPaymentMethodsPage'
+import MyProfilePage from '@/pages/MyProfilePage'
 import { NotFoundPage } from '@/pages/NotFoundPage'
 import OrderSuccessPage from '@/pages/OrderSuccessPage'
 import ProductListingPage from '@/pages/ProductListingPage'
@@ -33,14 +37,10 @@ export function MainRouter() {
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/checkout/:id" element={<CheckoutPage />} />
             <Route path="/order/:id/success" element={<OrderSuccessPage />} />
-            <Route
-              path="/perfil"
-              element={
-                <div className="p-12 text-center text-primary font-bold text-2xl">
-                  Meu Perfil Protegido! 🔒
-                </div>
-              }
-            />
+            <Route path="/meus-pedidos" element={<MyOrdersPage />} />
+            <Route path="/minhas-informacoes" element={<MyInfoPage />} />
+            <Route path="/metodos-pagamento" element={<MyPaymentMethodsPage />} />
+            <Route path="/perfil" element={<MyProfilePage />} />
           </Route>
 
           <Route path="*" element={<NotFoundPage />} />

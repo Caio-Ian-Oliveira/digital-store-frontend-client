@@ -204,7 +204,7 @@ export default function CartPage() {
               </h2>
               <div className="w-[85%] h-px bg-light-gray-3 mt-3 mb-5" />
 
-              <div className="space-y-8">
+              <div className="divide-y divide-light-gray-3">
                 {items.map((item) => {
                   const unitPrice =
                     item.product.priceDiscount || item.product.price
@@ -214,7 +214,7 @@ export default function CartPage() {
                     && item.product.priceDiscount < item.product.price
 
                   return (
-                    <div key={item.id}>
+                    <div key={item.id} className="py-6 first:pt-0 last:pb-0">
                       {/* Produto: imagem + nome + atributos */}
                       <div className="flex gap-4 items-start mb-5">
                         <div className="w-25 h-25 bg-[#E0D6F6]/40 rounded-lg shrink-0 flex items-center justify-center overflow-hidden p-2">
@@ -279,34 +279,38 @@ export default function CartPage() {
                         </button>
                       </div>
 
-                      {/* ── BLOCO 3: UNITÁRIO (horizontal, centralizado) ── */}
-                      <div className="flex items-baseline justify-center gap-3 mb-4 flex-wrap">
+                      {/* ── BLOCO 3: UNITÁRIO ── */}
+                      <div className="flex items-baseline justify-between mb-4">
                         <span className="text-sm font-medium text-dark-gray-3 uppercase">
                           UNITÁRIO
                         </span>
-                        {hasDiscount && (
-                          <span className="text-sm text-light-gray-2 line-through">
-                            {formatPrice(item.product.price)}
+                        <div className="flex items-baseline gap-2">
+                          {hasDiscount && (
+                            <span className="text-sm text-light-gray-2 line-through">
+                              {formatPrice(item.product.price)}
+                            </span>
+                          )}
+                          <span className="text-base font-bold text-dark-gray-2">
+                            {formatPrice(unitPrice)}
                           </span>
-                        )}
-                        <span className="text-base font-bold text-dark-gray-2">
-                          {formatPrice(unitPrice)}
-                        </span>
+                        </div>
                       </div>
 
-                      {/* ── BLOCO 4: TOTAL (horizontal, centralizado) ── */}
-                      <div className="flex items-baseline justify-center gap-3 flex-wrap">
+                      {/* ── BLOCO 4: TOTAL ── */}
+                      <div className="flex items-baseline justify-between">
                         <span className="text-sm font-medium text-dark-gray-3 uppercase">
                           TOTAL
                         </span>
-                        {hasDiscount && (
-                          <span className="text-sm text-light-gray-2 line-through">
-                            {formatPrice(item.product.price * item.quantity)}
+                        <div className="flex items-baseline gap-2">
+                          {hasDiscount && (
+                            <span className="text-sm text-light-gray-2 line-through">
+                              {formatPrice(item.product.price * item.quantity)}
+                            </span>
+                          )}
+                          <span className="text-base font-bold text-dark-gray-2">
+                            {formatPrice(itemTotal)}
                           </span>
-                        )}
-                        <span className="text-base font-bold text-dark-gray-2">
-                          {formatPrice(itemTotal)}
-                        </span>
+                        </div>
                       </div>
                     </div>
                   )

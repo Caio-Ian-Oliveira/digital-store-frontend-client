@@ -73,7 +73,7 @@ export default function ProductCard({
 
         {/* Preços — na mesma linha */}
         <div className="flex items-baseline gap-2">
-          {priceDiscount ? (
+          {priceDiscount && priceDiscount < price ? (
             <>
               <span className="text-sm text-light-gray line-through">
                 {formatPrice(price)}

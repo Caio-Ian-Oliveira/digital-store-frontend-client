@@ -10,6 +10,7 @@ export interface User {
   address?: string
   neighborhood?: string
   city?: string
+  state?: string
   cep?: string
   complement?: string
 }
