@@ -1,8 +1,10 @@
-import { useQuery } from '@tanstack/react-query'
-import { NavLink } from 'react-router-dom'
+import { Pagination } from '@/components/Pagination'
 import ProfileLayout from '@/components/ProfileLayout'
 import { useAuth } from '@/contexts/AuthContext'
 import { api } from '@/lib/api'
+import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
+import { NavLink } from 'react-router-dom'
 
 /* ─── Tipos ─── */
 
@@ -34,12 +36,12 @@ const statusMap: Record<string, { label: string; className: string }> = {
     className: 'text-warning font-bold'
   },
   completed: {
-    label: 'Finalizado',
-    className: 'text-[#8F8F8F] font-semibold'
+    label: 'Produto em trânsito',
+    className: 'text-warning font-bold'
   },
   cancelled: {
-    label: 'Cancelado',
-    className: 'text-error font-bold'
+    label: 'Produto em trânsito',
+    className: 'text-warning font-bold'
   }
 }
 
@@ -117,27 +119,39 @@ function OrderRow({ order }: { order: Order }) {
 
 export default function MyOrdersPage() {
   const { isAuthenticated } = useAuth()
+  const [page, setPage] = useState(1)
 
   const {
-    data: orders = [],
+    data: response,
     isLoading,
     error
   } = useQuery({
-    queryKey: ['orders'],
+    queryKey: ['orders', page],
     queryFn: async () => {
-      const { data } = await api.get<Order[]>('/orders')
-
-      const ordersArray = Array.isArray(data) ? [...data] : []
-      // Ordem cronológica crescente
-      ordersArray.sort(
-        (a, b) =>
-          new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+      const { data } = await api.get<Order[] | { data: Order[]; total: number }>(
+        '/orders',
+        {
+          params: { limit: 4, page }
+        }
       )
 
-      return ordersArray
+      const items = Array.isArray(data) ? data : (data?.data || [])
+      const totalItems = Array.isArray(data) ? data.length : (data?.total || items.length)
+      
+      const ordersArray = Array.isArray(items) ? [...items] : []
+      // Ordem cronológica decrescente para pedidos mais recentes no topo
+      ordersArray.sort(
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      )
+
+      return { orders: ordersArray, total: totalItems }
     },
     enabled: isAuthenticated
   })
+
+  const orders = response?.orders || []
+  const total = response?.total || 0
 
   return (
     <ProfileLayout>
@@ -198,10 +212,17 @@ export default function MyOrdersPage() {
 
       {/* Order List */}
       {!isLoading && !error && orders.length > 0 && (
-        <div>
+        <div className="pb-8">
           {orders.map((order) => (
             <OrderRow key={order.id} order={order} />
           ))}
+
+          <Pagination 
+            currentPage={page}
+            limit={4}
+            totalItems={total}
+            onPageChange={setPage}
+          />
         </div>
       )}
     </ProfileLayout>

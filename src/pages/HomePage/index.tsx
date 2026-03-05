@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { Gallery } from '@/components/Gallery'
 import { HeroSlide } from '@/components/HeroSlide'
 import ProductCard from '@/components/ProductCard'
@@ -7,7 +7,6 @@ import RouterLink from '@/components/RouterLink'
 import Section from '@/components/Section'
 import { Skeleton } from '@/components/ui/skeleton'
 import { getProducts } from '@/services/productService'
-import type { Product } from '@/types/Product'
 
 // Dados do Hero Banner (Seção 5.1)
 const heroSlides = [
@@ -54,27 +53,23 @@ const collections = [
 ]
 
 export default function HomePage() {
-  const [products, setProducts] = useState<Product[]>([])
-  const [error, setError] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    const fetchProducts = async () => {
+  const {
+    data: products = [],
+    isLoading,
+    error
+  } = useQuery({
+    queryKey: ['home-products'],
+    queryFn: async () => {
       try {
-        const data = await getProducts()
-        setProducts(data.slice(0, 8))
-        setError(null)
-      } catch (err) {
-        setError('Erro ao carregar produtos. Tente novamente mais tarde.')
-        console.error('Erro ao buscar produtos:', err)
-      } finally {
-        // Small artificial delay to show the nice skeleton in dev
-        setTimeout(() => setIsLoading(false), 300)
+        const response = await getProducts({ limit: 8 })
+        return response.data
+      } catch {
+        throw new Error(
+          'Erro ao carregar produtos. Tente novamente mais tarde.'
+        )
       }
     }
-
-    fetchProducts()
-  }, [])
+  })
 
   return (
     <div className="space-y-8 lg:space-y-16">
@@ -234,7 +229,11 @@ export default function HomePage() {
         >
           {error ? (
             <div className="flex items-center justify-center py-20">
-              <p className="text-lg text-error">{error}</p>
+              <p className="text-lg text-error">
+                {error instanceof Error
+                  ? error.message
+                  : 'Erro ao buscar produtos'}
+              </p>
             </div>
           ) : isLoading ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6 lg:gap-x-8 lg:gap-y-6">

@@ -41,7 +41,7 @@ export default function CartPage() {
     const fetchRelated = async () => {
       const allProducts = await getProducts()
       const cartIds = items.map((item) => item.product.id)
-      const related = allProducts
+      const related = allProducts.data
         .filter((p) => !cartIds.includes(p.id))
         .slice(0, 4)
       setRelatedProducts(related)

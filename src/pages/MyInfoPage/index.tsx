@@ -1,7 +1,7 @@
-import ProfileLayout from '@/components/ProfileLayout';
-import { useAuth } from '@/contexts/AuthContext';
-import { api } from '@/lib/api';
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
+import ProfileLayout from '@/components/ProfileLayout'
+import { useAuth } from '@/contexts/AuthContext'
+import { api } from '@/lib/api'
 
 /* ─── Info Row ─── */
 

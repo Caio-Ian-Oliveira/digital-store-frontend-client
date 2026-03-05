@@ -37,11 +37,11 @@ export default function ProductCard({
       aria-label={`Ver detalhes de ${name}`}
     >
       {/* Área da Imagem — fundo cinza claro, imagem centralizada */}
-      <div className="relative overflow-hidden rounded-t-lg">
+      <div className="relative overflow-hidden rounded-t-lg bg-light-gray-3/20">
         <img
           src={image}
           alt={name}
-          className="w-full h-[240px] lg:h-[300px] object-cover transition-transform duration-300 group-hover:scale-105"
+          className="w-full h-[240px] lg:h-[300px] object-contain p-4 mix-blend-multiply transition-transform duration-300 group-hover:scale-105"
         />
 
         {/* Badge de Desconto */}

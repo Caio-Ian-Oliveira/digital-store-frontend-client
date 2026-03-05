@@ -26,7 +26,7 @@ const Header = () => {
   const [cartModalOpen, setCartModalOpen] = useState(false)
   const location = useLocation()
   const { itemCount } = useCart()
-  const { user, isAuthenticated } = useAuth()
+  const { isAuthenticated } = useAuth()
 
   const isAuthPage =
     location.pathname === '/cadastro'

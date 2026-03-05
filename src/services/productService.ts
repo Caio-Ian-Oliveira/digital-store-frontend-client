@@ -24,8 +24,8 @@ export interface ApiProduct {
   categories: { id: string; name: string; slug: string }[]
 }
 
-interface SearchResponse {
-  data: ApiProduct[]
+export interface SearchResponse<T = ApiProduct> {
+  data: T[]
   total: number
   limit: number
   page: number
@@ -37,6 +37,28 @@ interface SearchResponse {
  */
 export function mapApiProduct(raw: ApiProduct): Product {
   const enabledImages = raw.images?.filter((img) => img.enabled) || []
+  // Fallback options se a API não retornar opções (útil para adicionar qualquer item no carrinho)
+  const defaultOptions = [
+    {
+      id: 991,
+      title: 'Tamanho',
+      shape: 'square' as const,
+      radius: 4,
+      type: 'text' as const,
+      values: ['39', '40', '41', '42', '43']
+    },
+    {
+      id: 992,
+      title: 'Cor',
+      shape: 'circle' as const,
+      radius: 50,
+      type: 'color' as const,
+      // Preto, Vermelho Claro, Cinza Claro
+      values: ['#000000', '#F08080', '#D3D3D3']
+    }
+  ]
+
+  const mappedOptions = raw.options && raw.options.length > 0 ? raw.options : defaultOptions
 
   return {
     id: String(raw.id),
@@ -48,20 +70,52 @@ export function mapApiProduct(raw: ApiProduct): Product {
     description: raw.description || undefined,
     category: raw.categories?.[0]?.name || undefined,
     images: enabledImages,
-    options: raw.options || [],
+    options: mappedOptions,
     categories: raw.categories || []
   }
 }
 
+export interface GetProductsOptions {
+  limit?: number
+  page?: number
+  match?: string
+  brand?: string
+  gender?: string
+  category_ids?: string[]
+  price_range?: {
+    min: number
+    max: number
+  }
+  options?: {
+    [key: string]: string[]
+  }
+}
+
 /**
- * Busca todos os produtos da API.
- * Usa limit=-1 para trazer todos de uma vez (sem paginação).
+ * Busca todos os produtos da API com suporte a filtros reais.
  */
-export const getProducts = async (): Promise<Product[]> => {
-  const { data } = await api.get<SearchResponse>('/product/search', {
-    params: { limit: -1 }
-  })
-  return data.data.map(mapApiProduct)
+export const getProducts = async (
+  options?: GetProductsOptions
+): Promise<SearchResponse<Product>> => {
+  const { data } = await api.get<SearchResponse<ApiProduct>>(
+    '/product/search',
+    {
+      params: {
+        limit: options?.limit ?? 12,
+        page: options?.page ?? 1,
+        match: options?.match,
+        brand: options?.brand,
+        gender: options?.gender,
+        category_ids: options?.category_ids?.join(','),
+        'price_range[min]': options?.price_range?.min,
+        'price_range[max]': options?.price_range?.max
+      }
+    }
+  )
+  return {
+    ...data,
+    data: data.data.map(mapApiProduct)
+  }
 }
 
 /**

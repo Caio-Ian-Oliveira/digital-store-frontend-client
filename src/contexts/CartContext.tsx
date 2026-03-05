@@ -129,7 +129,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         return [
           ...prev,
           {
-            id: 'temp-' + Date.now().toString(),
+            id: `temp-${Date.now()}`,
             product,
             quantity,
             selectedColor,

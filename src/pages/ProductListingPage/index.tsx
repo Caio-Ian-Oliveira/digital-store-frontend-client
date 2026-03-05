@@ -1,149 +1,121 @@
-import { Filter } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
 import { FilterGroup } from '@/components/FilterGroup'
+import { Pagination } from '@/components/Pagination'
 import ProductCard from '@/components/ProductCard'
 import { ProductCardSkeleton } from '@/components/ProductCardSkeleton'
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger
 } from '@/components/ui/sheet'
 import { getProducts } from '@/services/productService'
 import type { Product } from '@/types/Product'
-
-// Remove accents from string for better search matching
-function removeAccents(str: string) {
-  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-}
+import { useQuery } from '@tanstack/react-query'
+import { Filter } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
 export default function ProductListingPage() {
   const [searchParams] = useSearchParams()
   const filter = searchParams.get('filter') || ''
-  const [products, setProducts] = useState<Product[]>([])
-  const [error, setError] = useState<string | null>(null)
   const [filterBrand, setFilterBrand] = useState<string[]>([])
   const [filterCategory, setFilterCategory] = useState<string[]>([])
   const [filterGender, setFilterGender] = useState<string>('')
-  const [isLoading, setIsLoading] = useState(true)
-  // Estado filter state (visual only, filtering logic can be added later)
-  const [filterCondition, setFilterCondition] = useState<string>('new')
-  const [sortOrder, setSortOrder] = useState<'lowest' | 'highest'>('lowest')
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
   const [filterSheetOpen, setFilterSheetOpen] = useState(false)
-  // Suppress unused variable warning (used in UI, logic can be extended later)
-  void filterCondition
+  const [sortOrder, setSortOrder] = useState<'lowest' | 'highest'>('lowest')
+  const [page, setPage] = useState(1)
 
+  // Reseta para a página 1 ao mudar qualquer filtro
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const data = await getProducts()
-        setProducts(data)
-        setError(null)
-      } catch (err) {
-        setError('Erro ao carregar produtos. Tente novamente mais tarde.')
-        console.error('Erro ao buscar produtos:', err)
-      } finally {
-        setTimeout(() => setIsLoading(false), 300)
-      }
-    }
-    fetchProducts()
-  }, [])
+    setPage(1)
+  }, [filter, filterBrand, filterCategory, filterGender, sortOrder])
 
-  // Lista de marcas conhecidas para extrair do nome dos produtos
-  const KNOWN_BRANDS = [
-    'Nike',
-    'Adidas',
-    'Puma',
-    'Reebok',
-    'New Balance',
-    'Asics',
-    'Mizuno',
-    'Fila',
-    'Vans',
-    'Converse'
+  const {
+    data: response,
+    isLoading,
+    error
+  } = useQuery({
+    queryKey: [
+      'products',
+      page,
+      filter,
+      filterBrand,
+      filterCategory,
+      filterGender,
+      sortOrder
+    ],
+    queryFn: async () => {
+      // Pequeno delay artificial opcional apenas para mostrar o skeleton
+      await new Promise((resolve) => setTimeout(resolve, 300))
+
+      // biome-ignore lint/suspicious/noExplicitAny: Options can be very dynamic based on backend typing
+      const options: any = {
+        page: page,
+        limit: 12
+      }
+
+      if (filter) options.match = filter
+
+      if (filterGender) {
+        options.gender = filterGender === 'Unissex' ? 'Unisex' : filterGender
+      }
+
+      if (filterBrand.length > 0) {
+        options.brand = filterBrand.join(',')
+      }
+
+      const res = await getProducts(options)
+
+      // Sorting is still done locally per page if the API doesn't support exact sort orders natively
+      if (sortOrder === 'lowest') {
+        res.data.sort((a, b) => (a.price ?? 0) - (b.price ?? 0))
+      } else if (sortOrder === 'highest') {
+        res.data.sort((a, b) => (b.price ?? 0) - (a.price ?? 0))
+      }
+
+      return res
+    }
+  })
+
+  const products = response?.data || []
+  // Total count defined by the backend
+  const productCount: number = response?.total ?? products.length
+
+  const brandOptions = [
+    { label: 'Nike', value: 'Nike' },
+    { label: 'Adidas', value: 'Adidas' },
+    { label: 'Puma', value: 'Puma' },
+    { label: 'Reebok', value: 'Reebok' },
+    { label: 'New Balance', value: 'New Balance' },
+    { label: 'Asics', value: 'Asics' },
+    { label: 'Mizuno', value: 'Mizuno' },
+    { label: 'Fila', value: 'Fila' },
+    { label: 'Vans', value: 'Vans' },
+    { label: 'Converse', value: 'Converse' }
   ]
 
-  // Derive brand options from product names
-  const brandOptions = Array.from(
-    new Set(
-      products.flatMap((p) =>
-        KNOWN_BRANDS.filter((brand) =>
-          removeAccents(p.name.toLowerCase()).includes(
-            removeAccents(brand.toLowerCase())
-          )
-        )
-      )
-    )
-  ).map((b) => ({ label: b, value: b }))
   const categoryOptions = Array.from(
     new Set(
       products
-        .flatMap((p) => {
-          // Cada produto pode ter múltiplas categorias
+        .flatMap((p: Product) => {
           if (p.categories && p.categories.length > 0) {
-            return p.categories.map((cat) => cat.name)
+            return p.categories.map((cat: { name: string }) => cat.name)
           }
           return p.category ? [p.category] : []
         })
         .filter(Boolean)
     )
-  ).map((c) => ({ label: String(c), value: String(c) }))
-  const genderOptions = Array.from(
-    new Set(products.map((p) => p.gender).filter(Boolean))
-  ).map((g) => ({
-    label: g === 'male' ? 'Masculino' : g === 'female' ? 'Feminino' : 'Unissex',
-    value: String(g)
-  }))
-  const conditionOptions = [
-    { label: 'Novo', value: 'new' },
-    { label: 'Usado', value: 'used' }
+  ).map((c: unknown) => ({ label: String(c), value: String(c) }))
+
+  const genderOptions = [
+    { label: 'Masculino', value: 'Masculino' },
+    { label: 'Feminino', value: 'Feminino' },
+    { label: 'Unissex', value: 'Unissex' }
   ]
 
-  // Check if any filter is active (for visual indicator on button)
   const hasActiveFilters =
     filterBrand.length > 0 || filterCategory.length > 0 || filterGender !== ''
-
-  // Filtering and sorting logic
-  useEffect(() => {
-    let result = [...products]
-
-    // Search param filter
-    if (filter) {
-      const normalizedFilter = removeAccents(filter.toLowerCase())
-      result = result.filter((product) =>
-        removeAccents(product.name.toLowerCase()).includes(normalizedFilter)
-      )
-    }
-    if (filterBrand.length > 0) {
-      result = result.filter((p) =>
-        filterBrand.some((brand) =>
-          removeAccents(p.name.toLowerCase()).includes(
-            removeAccents(brand.toLowerCase())
-          )
-        )
-      )
-    }
-    if (filterCategory.length > 0) {
-      result = result.filter((p) => {
-        const productCategories =
-          p.categories?.map((cat) => cat.name)
-          || (p.category ? [p.category] : [])
-        return productCategories.some((cat) => filterCategory.includes(cat))
-      })
-    }
-    // Sorting
-    if (sortOrder === 'lowest') {
-      result.sort((a, b) => (a.price ?? 0) - (b.price ?? 0))
-    } else if (sortOrder === 'highest') {
-      result.sort((a, b) => (b.price ?? 0) - (a.price ?? 0))
-    }
-    setFilteredProducts(result)
-  }, [products, filter, filterBrand, filterCategory, filterGender, sortOrder])
-
-  const productCount: number = filteredProducts.length
 
   // Render the filter content (reused in both desktop sidebar and mobile sheet)
   const renderFilterContent = () => (
@@ -174,13 +146,6 @@ export default function ProductListingPage() {
         inputType="checkbox"
         options={genderOptions}
         onChange={(val) => setFilterGender(val)}
-      />
-
-      <FilterGroup
-        title="Estado"
-        inputType="radio"
-        options={conditionOptions}
-        onChange={(val) => setFilterCondition(val)}
       />
     </>
   )
@@ -283,7 +248,11 @@ export default function ProductListingPage() {
           {/* Grid de Produtos */}
           {error ? (
             <div className="flex flex-col items-center justify-center py-20 space-y-4">
-              <p className="text-lg text-error font-semibold">{error}</p>
+              <p className="text-lg text-error font-semibold">
+                {error instanceof Error
+                  ? error.message
+                  : 'Erro ao buscar produtos'}
+              </p>
               <button
                 type="button"
                 onClick={() => window.location.reload()}
@@ -300,26 +269,37 @@ export default function ProductListingPage() {
                 </div>
               ))}
             </div>
-          ) : filteredProducts.length === 0 ? (
+          ) : products.length === 0 ? (
             <div className="flex items-center justify-center py-20">
               <p className="text-lg text-light-gray">
-                Nenhum produto encontrado para "{filter}"
+                Nenhum produto encontrado.
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 min-[426px]:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-2 sm:gap-4 md:gap-6 lg:gap-x-8 lg:gap-y-6">
-              {filteredProducts.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  id={product.id}
-                  name={product.name}
-                  image={product.image}
-                  price={product.price}
-                  priceDiscount={product.priceDiscount}
-                  category={product.category}
+            <>
+              <div className="grid grid-cols-2 min-[426px]:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-2 sm:gap-4 md:gap-6 lg:gap-x-8 lg:gap-y-6">
+                {products.map((product, idx) => (
+                  <ProductCard
+                    key={`${product.id}-${idx}`}
+                    id={product.id}
+                    name={product.name}
+                    image={product.image}
+                    price={product.price}
+                    priceDiscount={product.priceDiscount}
+                    category={product.category}
+                  />
+                ))}
+              </div>
+
+              {!isLoading && (
+                <Pagination
+                  currentPage={page}
+                  limit={12}
+                  totalItems={productCount}
+                  onPageChange={setPage}
                 />
-              ))}
-            </div>
+              )}
+            </>
           )}
         </main>
       </div>

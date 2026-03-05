@@ -6,7 +6,6 @@ import ProductCard from '@/components/ProductCard'
 import { ProductOptions } from '@/components/ProductOptions'
 import RouterLink from '@/components/RouterLink'
 import Section from '@/components/Section'
-import type { CarouselApi } from '@/components/ui/carousel'
 import { getProductById, getProducts } from '@/services/productService'
 import type { Product } from '@/types/Product'
 
@@ -14,7 +13,6 @@ export default function ProductViewPage() {
   const { id } = useParams<{ id: string }>()
   const [product, setProduct] = useState<Product | null>(null)
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([])
-  const [galleryApi, setGalleryApi] = useState<CarouselApi | null>(null)
   const [selectedSize, setSelectedSize] = useState<string | undefined>(
     undefined
   )
@@ -29,18 +27,19 @@ export default function ProductViewPage() {
       // Reseta seleções ao trocar de produto
       setSelectedSize(undefined)
       setSelectedColor(undefined)
-      setGalleryApi(null)
 
       try {
         const [productData, allProducts] = await Promise.all([
           getProductById(id),
-          getProducts()
+          getProducts({ limit: 5 })
         ])
 
         if (productData) {
           setProduct(productData)
           // Filtra produtos relacionados (exclui o atual e pega até 4)
-          const related = allProducts.filter((p) => p.id !== id).slice(0, 4)
+          const related = allProducts.data
+            .filter((p) => p.id !== id)
+            .slice(0, 4)
           setRelatedProducts(related)
         }
       } catch (error) {
@@ -129,7 +128,6 @@ export default function ProductViewPage() {
           height="auto"
           radius="4px"
           className="w-full"
-          onApiReady={(api) => setGalleryApi(api)}
           objectFit="contain"
           imagePadding="p-4 lg:p-8"
         />

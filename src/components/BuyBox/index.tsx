@@ -1,6 +1,7 @@
 import { ShoppingCart } from 'lucide-react'
-import { type ReactNode, useState } from 'react'
+import { type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 import { useCart } from '@/contexts/CartContext'
 import type { Product } from '@/types/Product'
 
@@ -41,8 +42,6 @@ export function BuyBox({
 }: BuyBoxProps) {
   const navigate = useNavigate()
   const { addToCart } = useCart()
-  const [addedFeedback, setAddedFeedback] = useState(false)
-  const [validationError, setValidationError] = useState<string | null>(null)
 
   const buildProduct = (): Product => ({
     id: productId,
@@ -58,11 +57,9 @@ export function BuyBox({
 
   const validate = (): boolean => {
     if (!selectedColor || !selectedSize) {
-      setValidationError('Selecione a cor e o tamanho antes de continuar.')
-      setTimeout(() => setValidationError(null), 4000)
+      toast.error('Selecione a cor e o tamanho antes de continuar.')
       return false
     }
-    setValidationError(null)
     return true
   }
 
@@ -75,8 +72,7 @@ export function BuyBox({
   const handleAddToCart = () => {
     if (!validate()) return
     addToCart(buildProduct(), 1, selectedColor, selectedSize)
-    setAddedFeedback(true)
-    setTimeout(() => setAddedFeedback(false), 2000)
+    toast.success('Produto adicionado ao carrinho com sucesso!')
   }
 
   return (
@@ -169,13 +165,6 @@ export function BuyBox({
       {/* Opções de Produto (Tamanho/Cor - children) */}
       {children && <div className="space-y-4">{children}</div>}
 
-      {/* Notificação de validação */}
-      {validationError && (
-        <div className="bg-error/10 border border-error/30 text-error text-sm font-medium px-4 py-3 rounded-lg">
-          {validationError}
-        </div>
-      )}
-
       {/* Botões de Ação */}
       <div className="flex flex-col sm:flex-row gap-3">
         {/* Comprar → adiciona ao carrinho e navega */}
@@ -194,7 +183,7 @@ export function BuyBox({
           className="w-full sm:w-auto sm:min-w-45 h-12 border-2 border-warning text-warning font-bold text-sm rounded-xl hover:bg-warning/10 active:brightness-75 transition-all uppercase tracking-wide cursor-pointer min-h-11 flex items-center justify-center gap-2"
         >
           <ShoppingCart size={18} />
-          {addedFeedback ? 'Adicionado ✓' : 'Adicionar ao carrinho'}
+          Adicionar ao carrinho
         </button>
       </div>
     </div>
