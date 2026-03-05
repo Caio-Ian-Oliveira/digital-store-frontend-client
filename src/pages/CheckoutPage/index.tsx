@@ -1,8 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { useNavigate, useParams } from 'react-router-dom'
-import { z } from 'zod'
 import Section from '@/components/Section'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -13,6 +8,11 @@ import { useCart } from '@/contexts/CartContext'
 import { api } from '@/lib/api'
 import { getProductById } from '@/services/productService'
 import type { Product } from '@/types/Product'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useNavigate, useParams } from 'react-router-dom'
+import { z } from 'zod'
 
 const formatPrice = (value: number) =>
   new Intl.NumberFormat('pt-BR', {
@@ -211,11 +211,11 @@ export default function CheckoutPage() {
       <div className="mb-6 pb-6 border-b border-light-gray-3 space-y-4">
         {cartItems.map((item) => (
           <div key={item.id} className="flex items-start gap-4">
-            <div className="w-16 h-16 bg-[#E2E3FF] rounded px-1 shrink-0 flex items-center justify-center overflow-hidden">
+            <div className="w-16 h-16 shrink-0 flex items-center justify-center overflow-hidden">
               <img
                 src={item.product.image}
                 alt={item.product.name}
-                className="w-full h-auto object-contain mix-blend-multiply"
+                className="w-full h-auto object-contain"
               />
             </div>
             <div className="flex-1 min-w-0">
@@ -274,7 +274,7 @@ export default function CheckoutPage() {
         type="submit"
         form="checkout-form"
         disabled={isSubmitting}
-        className="w-full h-12 bg-[#F6AA1C] hover:bg-[#F6AA1C]/90 text-white font-bold text-base rounded-lg transition-colors cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+        className="hidden lg:block w-full h-12 bg-[#F6AA1C] hover:bg-[#F6AA1C]/90 text-white font-bold text-base rounded-lg transition-colors cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
       >
         {isSubmitting ? 'Processando...' : 'Realizar Pagamento'}
       </Button>
@@ -569,31 +569,9 @@ export default function CheckoutPage() {
             </Section>
           </div>
 
-          {/* Sticky Bottom Bar for Mobile (Matches the bottom strip of image) */}
-          <div className="lg:hidden w-screen -mx-4 bg-white px-6 py-4 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] mt-4">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-base font-bold text-dark-gray-2">
-                Total
-              </span>
-              <div className="text-right">
-                <span className="text-xl font-bold text-[#ED1A5A]">
-                  {formatPrice(total)}
-                </span>
-                <p className="text-xs text-light-gray-2">
-                  ou 10x de R$ {installmentValue} sem juros
-                </p>
-              </div>
-            </div>
 
-            <Button
-              type="submit"
-              form="checkout-form"
-              disabled={isSubmitting}
-              className="w-full h-12 bg-[#F6AA1C] hover:bg-[#F6AA1C]/90 text-white font-bold text-base rounded-lg transition-colors cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
-            >
-              {isSubmitting ? 'Processando...' : 'Realizar Pagamento'}
-            </Button>
-          </div>
+          {/* Espaço para a barra fixa não sobrepor conteúdo */}
+          <div className="h-36 lg:hidden" />
         </div>
 
         {/* Right Column - Order Summary (Desktop only) */}
@@ -605,6 +583,29 @@ export default function CheckoutPage() {
             <SummaryContent />
           </div>
         </div>
+      </div>
+
+      {/* ── Barra fixa inferior Mobile — CTA persistente ── */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white px-5 py-4 shadow-[0_-4px_12px_rgba(0,0,0,0.08)] z-30">
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-base font-bold text-dark-gray-2">Total</span>
+          <div className="text-right">
+            <span className="text-xl font-bold text-primary">
+              {formatPrice(total)}
+            </span>
+            <p className="text-xs text-light-gray">
+              ou 10x de R$ {installmentValue} sem juros
+            </p>
+          </div>
+        </div>
+        <Button
+          type="submit"
+          form="checkout-form"
+          disabled={isSubmitting}
+          className="w-full h-12 bg-warning hover:bg-warning/90 text-white font-bold text-base rounded-lg transition-colors cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+        >
+          {isSubmitting ? 'Processando...' : 'Realizar Pagamento'}
+        </Button>
       </div>
     </div>
   )

@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { api } from '@/lib/api'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const formatPrice = (value: number) =>
   new Intl.NumberFormat('pt-BR', {
@@ -189,11 +189,11 @@ export default function OrderSuccessPage() {
               <div className="space-y-6">
                 {order.items.map((item) => (
                   <div key={item.id} className="flex items-center gap-4">
-                    <div className="w-16 h-16 bg-[#E2E3FF] rounded px-1 shrink-0 flex items-center justify-center overflow-hidden">
+                    <div className="w-16 h-16 shrink-0 flex items-center justify-center overflow-hidden">
                       <img
                         src={item.image_url}
                         alt={item.product_name}
-                        className="w-full h-auto object-contain mix-blend-multiply"
+                        className="w-full h-auto object-contain"
                       />
                     </div>
                     <p className="text-sm font-bold text-dark-gray-2 flex-1 leading-snug">

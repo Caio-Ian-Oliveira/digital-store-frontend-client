@@ -3,15 +3,15 @@ import { Pagination } from '@/components/Pagination'
 import ProductCard from '@/components/ProductCard'
 import { ProductCardSkeleton } from '@/components/ProductCardSkeleton'
 import {
-    Sheet,
-    SheetContent,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger
 } from '@/components/ui/sheet'
 import { getProducts } from '@/services/productService'
 import type { Product } from '@/types/Product'
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { Filter } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
@@ -34,6 +34,7 @@ export default function ProductListingPage() {
   const {
     data: response,
     isLoading,
+    isFetching,
     error
   } = useQuery({
     queryKey: [
@@ -75,7 +76,8 @@ export default function ProductListingPage() {
       }
 
       return res
-    }
+    },
+    placeholderData: keepPreviousData
   })
 
   const products = response?.data || []
@@ -277,7 +279,7 @@ export default function ProductListingPage() {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-2 min-[426px]:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-2 sm:gap-4 md:gap-6 lg:gap-x-8 lg:gap-y-6">
+              <div className={`min-h-[800px] content-start grid grid-cols-2 min-[426px]:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-2 sm:gap-4 md:gap-6 lg:gap-x-8 lg:gap-y-6 transition-opacity duration-200 ${isFetching ? 'opacity-50 pointer-events-none' : ''}`}>
                 {products.map((product, idx) => (
                   <ProductCard
                     key={`${product.id}-${idx}`}

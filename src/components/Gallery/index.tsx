@@ -1,19 +1,19 @@
+import {
+    Carousel,
+    type CarouselApi,
+    CarouselContent,
+    CarouselItem
+} from '@/components/ui/carousel'
+import { cn } from '@/lib/utils'
 import Autoplay from 'embla-carousel-autoplay'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import {
-  type CSSProperties,
-  type ReactNode,
-  useEffect,
-  useRef,
-  useState
+    type CSSProperties,
+    type ReactNode,
+    useEffect,
+    useRef,
+    useState
 } from 'react'
-import {
-  Carousel,
-  type CarouselApi,
-  CarouselContent,
-  CarouselItem
-} from '@/components/ui/carousel'
-import { cn } from '@/lib/utils'
 
 export interface GallerySlide {
   src: string
@@ -171,7 +171,7 @@ export function Gallery({
                 style={{
                   width: width,
                   height: height,
-                  backgroundColor: slide.style?.backgroundColor || '#F5F5F5',
+                  backgroundColor: slide.style?.backgroundColor || 'transparent',
                   ...slide.style
                 }}
               >
@@ -258,7 +258,7 @@ export function Gallery({
                     : 'border-2 border-transparent hover:border-light-gray-2'
                 )}
                 style={{
-                  backgroundColor: slide.style?.backgroundColor || '#F5F5F5'
+                  backgroundColor: slide.style?.backgroundColor || 'transparent'
                 }}
                 aria-label={`Ver imagem ${index + 1}`}
                 aria-current={current === index ? true : undefined}

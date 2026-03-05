@@ -126,7 +126,7 @@ export default function ProfileLayout({ children }: { children: ReactNode }) {
 
         {/* Content Card */}
         <main className="flex-1 min-w-0">
-          <div className="bg-white rounded-lg shadow-sm p-6 lg:p-8">
+          <div className="bg-white rounded-lg shadow-sm p-6 lg:p-8 min-h-[650px] flex flex-col">
             {children}
           </div>
         </main>

@@ -2,7 +2,7 @@ import { Pagination } from '@/components/Pagination'
 import ProfileLayout from '@/components/ProfileLayout'
 import { useAuth } from '@/contexts/AuthContext'
 import { api } from '@/lib/api'
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
@@ -70,12 +70,12 @@ function OrderRow({ order }: { order: Order }) {
       {/* Top: Image and Text */}
       <div className="flex gap-[14px] flex-1 items-start md:items-center min-w-0 w-full">
         {/* Thumbnail */}
-        <div className="w-[72px] h-[72px] shrink-0 rounded-[4px] bg-[#E2E3FF] flex items-center justify-center p-2">
+        <div className="w-[72px] h-[72px] shrink-0 flex items-center justify-center">
           {firstItem ? (
             <img
               src={firstItem.image_url}
               alt={firstItem.product_name}
-              className="w-full h-full object-contain mix-blend-multiply"
+              className="w-full h-full object-contain"
             />
           ) : (
             <div className="w-full h-full bg-light-gray-3 rounded-[4px]" />
@@ -124,6 +124,7 @@ export default function MyOrdersPage() {
   const {
     data: response,
     isLoading,
+    isFetching,
     error
   } = useQuery({
     queryKey: ['orders', page],
@@ -147,7 +148,8 @@ export default function MyOrdersPage() {
 
       return { orders: ordersArray, total: totalItems }
     },
-    enabled: isAuthenticated
+    enabled: isAuthenticated,
+    placeholderData: keepPreviousData
   })
 
   const orders = response?.orders || []
@@ -165,8 +167,9 @@ export default function MyOrdersPage() {
         </span>
       </div>
 
-      {/* Loading */}
-      {isLoading && (
+      <div className="flex-1 flex flex-col relative">
+        {/* Loading */}
+        {isLoading && (
         <div className="space-y-4 py-4">
           {[1, 2, 3].map((i) => (
             <div key={i} className="flex items-center gap-4 animate-pulse">
@@ -212,10 +215,12 @@ export default function MyOrdersPage() {
 
       {/* Order List */}
       {!isLoading && !error && orders.length > 0 && (
-        <div className="pb-8">
-          {orders.map((order) => (
-            <OrderRow key={order.id} order={order} />
-          ))}
+        <div className={`pb-8 flex flex-col justify-between min-h-[500px] transition-opacity duration-200 ${isFetching ? 'opacity-50 pointer-events-none' : ''}`}>
+          <div>
+            {orders.map((order) => (
+              <OrderRow key={order.id} order={order} />
+            ))}
+          </div>
 
           <Pagination 
             currentPage={page}
@@ -225,6 +230,7 @@ export default function MyOrdersPage() {
           />
         </div>
       )}
+      </div>
     </ProfileLayout>
   )
 }

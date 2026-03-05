@@ -1,6 +1,3 @@
-import { Minus, Plus } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import ProductCard from '@/components/ProductCard'
 import Section from '@/components/Section'
 import { Button } from '@/components/ui/button'
@@ -8,6 +5,9 @@ import { Input } from '@/components/ui/input'
 import { useCart } from '@/contexts/CartContext'
 import { getProducts } from '@/services/productService'
 import type { Product } from '@/types/Product'
+import { Minus, Plus } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const formatPrice = (value: number) =>
   new Intl.NumberFormat('pt-BR', {
@@ -217,11 +217,11 @@ export default function CartPage() {
                     <div key={item.id} className="py-6 first:pt-0 last:pb-0">
                       {/* Produto: imagem + nome + atributos */}
                       <div className="flex gap-4 items-start mb-5">
-                        <div className="w-25 h-25 bg-[#E0D6F6]/40 rounded-lg shrink-0 flex items-center justify-center overflow-hidden p-2">
+                        <div className="w-25 h-25 shrink-0 flex items-center justify-center overflow-hidden">
                           <img
                             src={item.product.image}
                             alt={item.product.name}
-                            className="w-full h-full object-contain mix-blend-multiply"
+                            className="w-full h-full object-contain"
                           />
                         </div>
                         <div className="flex flex-col gap-1 min-w-0 pt-0.5">
@@ -444,11 +444,11 @@ export default function CartPage() {
                   <div className="grid grid-cols-[1fr_140px_120px_120px] gap-4 items-center">
                     {/* Produto info */}
                     <div className="flex items-start gap-4">
-                      <div className="w-20 h-20 bg-secondary/40 rounded-lg shrink-0 flex items-center justify-center overflow-hidden p-1">
+                      <div className="w-20 h-20 shrink-0 flex items-center justify-center overflow-hidden">
                         <img
                           src={item.product.image}
                           alt={item.product.name}
-                          className="w-full h-full object-contain mix-blend-multiply"
+                          className="w-full h-full object-contain"
                         />
                       </div>
                       <div className="flex flex-col gap-1 min-w-0">
