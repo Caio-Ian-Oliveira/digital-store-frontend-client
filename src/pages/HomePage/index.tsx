@@ -141,7 +141,7 @@ export default function HomePage() {
               onClick={() => {}}
               className="flex flex-col items-center gap-3 group cursor-pointer"
             >
-              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-light-gray-3 flex items-center justify-center group-hover:bg-light-gray-2 transition-colors overflow-hidden">
+              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-light-gray-3 flex items-center justify-center border-2 border-transparent group-hover:border-primary transition-all overflow-hidden duration-300">
                 <img
                   src="/cat_tshirt_minimal.svg"
                   alt="Camisetas"
@@ -159,7 +159,7 @@ export default function HomePage() {
               onClick={() => {}}
               className="flex flex-col items-center gap-3 group cursor-pointer"
             >
-              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-light-gray-3 flex items-center justify-center group-hover:bg-light-gray-2 transition-colors overflow-hidden">
+              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-light-gray-3 flex items-center justify-center border-2 border-transparent group-hover:border-primary transition-all overflow-hidden duration-300">
                 <img
                   src="/cat_pants_minimal.svg"
                   alt="Calças"
@@ -177,7 +177,7 @@ export default function HomePage() {
               onClick={() => {}}
               className="flex flex-col items-center gap-3 group cursor-pointer"
             >
-              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-light-gray-3 flex items-center justify-center group-hover:bg-light-gray-2 transition-colors overflow-hidden">
+              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-light-gray-3 flex items-center justify-center border-2 border-transparent group-hover:border-primary transition-all overflow-hidden duration-300">
                 <img
                   src="/cat_cap_minimal.svg"
                   alt="Bonés"
@@ -195,7 +195,7 @@ export default function HomePage() {
               onClick={() => {}}
               className="flex flex-col items-center gap-3 group cursor-pointer"
             >
-              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-light-gray-3 flex items-center justify-center group-hover:bg-light-gray-2 transition-colors overflow-hidden">
+              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-light-gray-3 flex items-center justify-center border-2 border-transparent group-hover:border-primary transition-all overflow-hidden duration-300">
                 <img
                   src="/cat_headphones_minimal.svg"
                   alt="Headphones"
@@ -213,7 +213,7 @@ export default function HomePage() {
               onClick={() => {}}
               className="flex flex-col items-center gap-3 group cursor-pointer"
             >
-              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-light-gray-3 flex items-center justify-center group-hover:bg-light-gray-2 transition-colors overflow-hidden">
+              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-light-gray-3 flex items-center justify-center border-2 border-transparent group-hover:border-primary transition-all overflow-hidden duration-300">
                 <img
                   src="/cat_sneakers_minimal.svg"
                   alt="Tênis"
