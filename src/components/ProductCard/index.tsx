@@ -43,7 +43,7 @@ export default function ProductCard({
     >
       {/* Área da Imagem — Mobile: 163x179px | Desktop: 292x321px */}
       <div 
-        className="relative w-full flex items-center justify-center shrink-0"
+        className="relative w-full flex items-center justify-center shrink-0 overflow-hidden"
         style={{ aspectRatio: 'var(--img-ratio)' }}
       >
         <style>{`
@@ -53,7 +53,7 @@ export default function ProductCard({
         <img
           src={image}
           alt={name}
-          className="w-full h-full object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.03)] transition-transform duration-300 group-hover:scale-105"
+          className="w-full h-[75%] object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.03)] transition-transform duration-300 group-hover:scale-105"
         />
 
         {/* Badge de Desconto */}
