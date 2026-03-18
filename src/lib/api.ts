@@ -2,10 +2,10 @@ import axios from 'axios'
 
 /**
  * Instância global do Axios configurada para a Digital Store API.
- * 
+ *
  * - baseURL: Ponto de entrada das versões v1 da nossa API.
  * - withCredentials: ESSENCIAL para o funcionamento da segurança via Cookies HTTP-Only.
- *   Isso garante que o token JWT (armazenado no cookie pelo backend) seja 
+ *   Isso garante que o token JWT (armazenado no cookie pelo backend) seja
  *   enviado em todas as requisições autenticadas automaticamente.
  */
 export const api = axios.create({
@@ -21,7 +21,7 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       try {
         localStorage.removeItem('@DigitalStore:user')
-      } catch (e) {
+      } catch (_e) {
         // Ignora erro se não conseguir remover
       }
 

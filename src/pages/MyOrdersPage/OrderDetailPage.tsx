@@ -1,11 +1,11 @@
+import { ArrowLeft } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import ProfileLayout from '@/components/ProfileLayout'
 import { Button } from '@/components/ui/button'
 import { api } from '@/lib/api'
 import type { Order } from '@/types/Order'
 import { getStatusInfo } from '@/utils/orderStatus'
-import { ArrowLeft } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
 
 const formatPrice = (value: number) =>
   new Intl.NumberFormat('pt-BR', {
@@ -26,7 +26,7 @@ export default function OrderDetailPage() {
         setIsLoading(true)
         const { data } = await api.get<Order>(`/orders/${id}`)
         setOrder(data)
-      } catch (err: any) {
+      } catch (err) {
         console.error('Erro ao carregar pedido:', err)
         setError('Não foi possível carregar os detalhes deste pedido.')
       } finally {
@@ -59,7 +59,9 @@ export default function OrderDetailPage() {
     return (
       <ProfileLayout>
         <div className="flex flex-col items-center justify-center py-12 text-center">
-          <p className="text-error font-bold mb-4">{error || 'Pedido não encontrado'}</p>
+          <p className="text-error font-bold mb-4">
+            {error || 'Pedido não encontrado'}
+          </p>
           <Button
             onClick={() => navigate('/meus-pedidos')}
             variant="outline"
@@ -94,6 +96,7 @@ export default function OrderDetailPage() {
       <div className="flex flex-col gap-6">
         {/* Header/Back Link */}
         <button
+          type="button"
           onClick={() => navigate('/meus-pedidos')}
           className="flex items-center gap-2 text-primary text-sm font-bold hover:text-tertiary transition-colors w-fit"
         >
@@ -110,12 +113,16 @@ export default function OrderDetailPage() {
               Detalhes do Pedido
             </h1>
           </div>
-          
+
           <div className="flex flex-col items-start md:items-end gap-1">
-             <span className="text-xs font-bold text-dark-gray-2 uppercase tracking-wide">Status</span>
-             <span className={`${getStatusInfo(order.status).className} text-sm`}>
-                {getStatusInfo(order.status).label}
-             </span>
+            <span className="text-xs font-bold text-dark-gray-2 uppercase tracking-wide">
+              Status
+            </span>
+            <span
+              className={`${getStatusInfo(order.status).className} text-sm`}
+            >
+              {getStatusInfo(order.status).label}
+            </span>
           </div>
         </div>
 
@@ -142,8 +149,14 @@ export default function OrderDetailPage() {
                 Informações de Entrega
               </h2>
               <div className="space-y-3">
-                <InfoRow label="Endereço" value={order.delivery_address.address} />
-                <InfoRow label="Bairro" value={order.delivery_address.neighborhood} />
+                <InfoRow
+                  label="Endereço"
+                  value={order.delivery_address.address}
+                />
+                <InfoRow
+                  label="Bairro"
+                  value={order.delivery_address.neighborhood}
+                />
                 <InfoRow label="Cidade" value={order.delivery_address.city} />
                 <InfoRow label="CEP" value={order.delivery_address.cep} />
               </div>
@@ -177,7 +190,10 @@ export default function OrderDetailPage() {
           </h2>
           <div className="space-y-6">
             {order.items.map((item) => (
-              <div key={item.id || item.product_id} className="flex items-center gap-4 py-2 border-b border-light-gray-3 last:border-b-0">
+              <div
+                key={item.id || item.product_id}
+                className="flex items-center gap-4 py-2 border-b border-light-gray-3 last:border-b-0"
+              >
                 <div className="w-16 h-16 shrink-0 flex items-center justify-center overflow-hidden bg-light-gray-3 rounded">
                   <img
                     src={item.image_url}
@@ -194,9 +210,9 @@ export default function OrderDetailPage() {
                   </p>
                 </div>
                 <div className="text-right">
-                    <p className="text-sm font-bold text-dark-gray-2">
-                        {formatPrice(item.price_at_purchase * item.quantity)}
-                    </p>
+                  <p className="text-sm font-bold text-dark-gray-2">
+                    {formatPrice(item.price_at_purchase * item.quantity)}
+                  </p>
                 </div>
               </div>
             ))}
@@ -205,36 +221,46 @@ export default function OrderDetailPage() {
 
         {/* Total Summary */}
         <div className="mt-4 ml-auto w-full max-w-sm">
-           <div className="bg-[#F9F8FE] rounded-lg p-6 space-y-4">
+          <div className="bg-[#F9F8FE] rounded-lg p-6 space-y-4">
+            <div className="flex justify-between text-sm">
+              <span className="text-light-gray-2 font-medium">Subtotal:</span>
+              <span className="text-dark-gray-2 font-bold">
+                {formatPrice(order.summary?.subtotal ?? 0)}
+              </span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-light-gray-2 font-medium">Frete:</span>
+              <span className="text-dark-gray-2 font-bold">
+                {formatPrice(order.summary?.shipping ?? 0)}
+              </span>
+            </div>
+            {order.summary && order.summary.discount > 0 && (
               <div className="flex justify-between text-sm">
-                <span className="text-light-gray-2 font-medium">Subtotal:</span>
-                <span className="text-dark-gray-2 font-bold">{formatPrice(order.summary?.subtotal ?? 0)}</span>
+                <span className="text-light-gray-2 font-medium">Desconto:</span>
+                <span className="text-dark-gray-2 font-bold text-error">
+                  -{formatPrice(order.summary.discount)}
+                </span>
               </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-light-gray-2 font-medium">Frete:</span>
-                <span className="text-dark-gray-2 font-bold">{formatPrice(order.summary?.shipping ?? 0)}</span>
-              </div>
-              {order.summary && order.summary.discount > 0 && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-light-gray-2 font-medium">Desconto:</span>
-                  <span className="text-dark-gray-2 font-bold text-error">-{formatPrice(order.summary.discount)}</span>
-                </div>
-              )}
-              <div className="flex justify-between text-lg pt-4 border-t border-light-gray-3">
-                <span className="text-dark-gray font-bold uppercase transition-colors">Total:</span>
-                <span className="text-primary font-bold">{formatPrice(order.summary?.total ?? 0)}</span>
-              </div>
-           </div>
+            )}
+            <div className="flex justify-between text-lg pt-4 border-t border-light-gray-3">
+              <span className="text-dark-gray font-bold uppercase transition-colors">
+                Total:
+              </span>
+              <span className="text-primary font-bold">
+                {formatPrice(order.summary?.total ?? 0)}
+              </span>
+            </div>
+          </div>
         </div>
 
         <div className="flex justify-center mt-8">
-            <Button
-                onClick={() => window.print()}
-                variant="ghost"
-                className="text-primary text-lg underline hover:text-tertiary"
-            >
-                Imprimir Detalhes do Pedido
-            </Button>
+          <Button
+            onClick={() => window.print()}
+            variant="ghost"
+            className="text-primary text-lg underline hover:text-tertiary"
+          >
+            Imprimir Detalhes do Pedido
+          </Button>
         </div>
       </div>
     </ProfileLayout>

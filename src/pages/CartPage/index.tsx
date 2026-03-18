@@ -1,3 +1,6 @@
+import { Minus, Plus } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import ProductCard from '@/components/ProductCard'
 import Section from '@/components/Section'
 import { Button } from '@/components/ui/button'
@@ -5,9 +8,6 @@ import { Input } from '@/components/ui/input'
 import { useCart } from '@/contexts/CartContext'
 import { getProducts } from '@/services/productService'
 import type { Product } from '@/types/Product'
-import { Minus, Plus } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 const formatPrice = (value: number) =>
   new Intl.NumberFormat('pt-BR', {
@@ -325,10 +325,14 @@ export default function CartPage() {
 
             {/* ── BLOCO 5: Cupom de desconto ── */}
             <div className="bg-white rounded-lg p-5">
-              <label className="text-sm font-medium text-dark-gray-2 mb-4 block">
+              <label
+                htmlFor="coupon-input"
+                className="text-sm font-medium text-dark-gray-2 mb-4 block cursor-pointer"
+              >
                 Cupom de desconto
               </label>
               <Input
+                id="coupon-input"
                 value={couponInput}
                 onChange={(e) => setCouponInput(e.target.value)}
                 placeholder="Insira seu código"
@@ -362,10 +366,14 @@ export default function CartPage() {
 
             {/* ── BLOCO 6: Calcular frete ── */}
             <div className="bg-white rounded-lg p-5">
-              <label className="text-sm font-medium text-dark-gray-2 mb-4 block">
+              <label
+                htmlFor="cep-input"
+                className="text-sm font-medium text-dark-gray-2 mb-4 block cursor-pointer"
+              >
                 Calcular frete
               </label>
               <Input
+                id="cep-input"
                 value={cepInput}
                 onChange={(e) => setCepInput(e.target.value)}
                 placeholder="Insira seu CEP"
@@ -537,11 +545,15 @@ export default function CartPage() {
             <div className="grid grid-cols-2 gap-6">
               {/* Cupom de desconto */}
               <div>
-                <label className="text-xs text-light-gray mb-2 block">
+                <label
+                  htmlFor="coupon-input-desktop"
+                  className="text-xs text-light-gray mb-2 block cursor-pointer"
+                >
                   Cupom de desconto
                 </label>
                 <div className="flex gap-2">
                   <Input
+                    id="coupon-input-desktop"
                     value={couponInput}
                     onChange={(e) => setCouponInput(e.target.value)}
                     placeholder="Insira seu código"
@@ -576,11 +588,15 @@ export default function CartPage() {
 
               {/* Calcular frete */}
               <div>
-                <label className="text-xs text-light-gray mb-2 block">
+                <label
+                  htmlFor="cep-input-desktop"
+                  className="text-xs text-light-gray mb-2 block cursor-pointer"
+                >
                   Calcular frete
                 </label>
                 <div className="flex gap-2">
                   <Input
+                    id="cep-input-desktop"
                     value={cepInput}
                     onChange={(e) => setCepInput(e.target.value)}
                     placeholder="Insira seu CEP"

@@ -70,7 +70,9 @@ export function Pagination({
 
       {end < totalPages && (
         <>
-          {end < totalPages - 1 && <span className="text-dark-gray-3">...</span>}
+          {end < totalPages - 1 && (
+            <span className="text-dark-gray-3">...</span>
+          )}
           <button
             type="button"
             onClick={() => onPageChange(totalPages)}

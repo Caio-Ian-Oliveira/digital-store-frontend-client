@@ -1,6 +1,6 @@
-import RouterLink from '@/components/RouterLink'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import RouterLink from '@/components/RouterLink'
 
 const RegisterPage = () => {
   const [email, setEmail] = useState('')

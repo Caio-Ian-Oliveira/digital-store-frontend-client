@@ -152,7 +152,7 @@ export default function MyInfoPage() {
         setIsLoading(true)
         const { data } = await api.get('/user/profile')
         setUser(data)
-      } catch (err: any) {
+      } catch (err) {
         console.error('Erro ao carregar perfil:', err)
         setFetchError('Não foi possível carregar seu perfil.')
       } finally {
@@ -161,7 +161,7 @@ export default function MyInfoPage() {
     }
 
     fetchProfile()
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [setUser]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSaveAddress = async (addressData: AddressFormData) => {
     const { data } = await api.put('/user/address', addressData)

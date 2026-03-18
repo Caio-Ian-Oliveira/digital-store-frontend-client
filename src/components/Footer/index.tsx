@@ -1,6 +1,6 @@
-import facebookIcon from '@/assets/facebook.svg'
-import instagramIcon from '@/assets/instagram.svg'
-import twitterIcon from '@/assets/twitter.svg'
+import facebookIcon from '@/assets/images/facebook.svg'
+import instagramIcon from '@/assets/images/instagram.svg'
+import twitterIcon from '@/assets/images/twitter.svg'
 import Logo from '../Logo'
 import FooterInformation from './FooterInformation'
 

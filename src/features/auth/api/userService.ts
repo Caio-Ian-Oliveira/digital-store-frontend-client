@@ -1,5 +1,5 @@
-import { api } from '@/lib/api'
 import axios from 'axios'
+import { api } from '@/lib/api'
 
 export interface RegisterUserPayload {
   firstname: string
@@ -19,7 +19,7 @@ export interface RegisterUserPayload {
 
 /**
  * Envia os dados de um novo usuário para o Backend.
- * 
+ *
  * @param data - Objeto contendo dados pessoais, senha e endereço.
  * @returns Resposta de sucesso do servidor.
  * @throws Array de erros de validação vindos do Backend (Zod/Sequelize).

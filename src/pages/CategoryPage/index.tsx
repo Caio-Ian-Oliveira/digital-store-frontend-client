@@ -14,10 +14,7 @@ export default function CategoryPage() {
       <nav aria-label="Breadcrumb" className="mb-6">
         <ol className="flex items-center gap-2 text-sm text-light-gray">
           <li>
-            <RouterLink
-              to="/"
-              className="hover:text-primary transition-colors"
-            >
+            <RouterLink to="/" className="hover:text-primary transition-colors">
               Home
             </RouterLink>
           </li>

@@ -1,6 +1,6 @@
 import { AuthProvider } from './contexts/AuthContext'
 import { CartProvider } from './contexts/CartContext'
-import { MainRouter } from './routers/MainRouter'
+import { MainRouter } from './routes/MainRouter'
 
 /**
  * Componente Raiz da Aplicação.

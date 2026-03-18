@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { BuyBox } from '@/components/BuyBox'
 import { Gallery } from '@/components/Gallery'
 import ProductCard from '@/components/ProductCard'
@@ -6,8 +8,6 @@ import RouterLink from '@/components/RouterLink'
 import Section from '@/components/Section'
 import { getProductById, getProducts } from '@/services/productService'
 import type { Product } from '@/types/Product'
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
 
 /**
  * Página de Detalhes do Produto.

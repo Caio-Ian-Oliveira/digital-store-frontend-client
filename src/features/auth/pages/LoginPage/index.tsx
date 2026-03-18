@@ -1,10 +1,10 @@
-import RouterLink from '@/components/RouterLink'
-import { useAuth } from '@/contexts/AuthContext'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import { Loader2 } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import RouterLink from '@/components/RouterLink'
+import { useAuth } from '@/contexts/AuthContext'
 import LoginLoadingScreen from '../../components/LoginLoadingScreen'
 import { useLoginMutation } from '../../queries/useLoginMutation'
 import { type LoginFormData, loginSchema } from '../../utils/loginSchema'
@@ -30,7 +30,7 @@ const LoginPage = () => {
     try {
       const response = await login(data)
       // Save user to context and localStorage
-      if (response && response.user) {
+      if (response?.user) {
         setUser(response.user)
       }
       // Exibe tela de carregamento antes de redirecionar

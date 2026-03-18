@@ -1,5 +1,5 @@
-import logoFooter from '@/assets/logo-footer.svg'
-import logoHeader from '@/assets/logo-header.svg'
+import logoFooter from '@/assets/images/logo-footer.svg'
+import logoHeader from '@/assets/images/logo-header.svg'
 import RouterLink from '@/components/RouterLink'
 
 interface LogoProps {
