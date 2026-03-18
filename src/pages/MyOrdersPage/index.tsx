@@ -8,55 +8,11 @@ import { NavLink } from 'react-router-dom'
 
 /* ─── Tipos ─── */
 
-interface OrderItem {
-  product_id: number
-  product_name: string
-  image_url: string
-  quantity: number
-  price_at_purchase: number
-}
-
-interface Order {
-  id: string
-  status: string
-  created_at: string
-  total: number
-  items: OrderItem[]
-}
+import type { Order } from '@/types/Order'
 
 /* ─── Helpers ─── */
 
-const statusMap: Record<string, { label: string; className: string }> = {
-  pending: {
-    label: 'Aguardando Pagamento',
-    className: 'bg-amber-100 text-amber-800 px-3 py-1 rounded-full font-semibold'
-  },
-  completed: {
-    label: 'Pago',
-    className: 'bg-green-100 text-green-800 px-3 py-1 rounded-full font-semibold'
-  },
-  shipped: {
-    label: 'Em Rota de Entrega',
-    className: 'bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-semibold'
-  },
-  delivered: {
-    label: 'Entregue',
-    className: 'bg-gray-100 text-gray-800 px-3 py-1 rounded-full font-semibold'
-  },
-  cancelled: {
-    label: 'Cancelado',
-    className: 'bg-red-100 text-red-800 px-3 py-1 rounded-full font-semibold'
-  }
-}
-
-function getStatusInfo(status: string) {
-  return (
-    statusMap[status] ?? {
-      label: 'Pago',
-      className: 'bg-green-100 text-green-800 px-3 py-1 rounded-full font-semibold'
-    }
-  )
-}
+import { getStatusInfo } from '@/utils/orderStatus'
 
 function formatOrderId(id: string) {
   const digits = id.replace(/\D/g, '')
@@ -104,16 +60,25 @@ function OrderRow({ order }: { order: Order }) {
         </div>
       </div>
 
-      {/* Bottom: Status */}
-      <div className="flex items-center justify-between md:justify-end w-full md:w-auto mt-1 md:mt-0">
-        <span className="text-[11px] font-bold text-dark-gray-2 uppercase tracking-wide md:hidden">
-          Status
-        </span>
-        <span
-          className={`text-[13px] md:text-sm whitespace-nowrap ${statusInfo.className}`}
+      {/* Bottom: Status & Details Link */}
+      <div className="flex items-center justify-between md:flex-col md:items-end md:justify-center w-full md:w-auto mt-1 md:mt-0 gap-2">
+        <div className="flex items-center justify-between w-full md:w-auto gap-4">
+          <span className="text-[11px] font-bold text-dark-gray-2 uppercase tracking-wide md:hidden">
+            Status
+          </span>
+          <span
+            className={`text-[13px] md:text-sm whitespace-nowrap ${statusInfo.className}`}
+          >
+            {statusInfo.label}
+          </span>
+        </div>
+        
+        <NavLink 
+          to={`/meus-pedidos/${order.id}`}
+          className="text-[12px] font-medium text-primary underline hover:text-tertiary transition-colors"
         >
-          {statusInfo.label}
-        </span>
+          Ver Detalhes
+        </NavLink>
       </div>
     </div>
   )
@@ -143,7 +108,7 @@ export default function MyOrdersPage() {
       const items = Array.isArray(data) ? data : (data?.data || [])
       const totalItems = Array.isArray(data) ? data.length : (data?.total || items.length)
       
-      const ordersArray = Array.isArray(items) ? [...items] : []
+      const ordersArray = (Array.isArray(items) ? [...items] : []) as Order[]
       // Ordem cronológica decrescente para pedidos mais recentes no topo
       ordersArray.sort(
         (a, b) =>

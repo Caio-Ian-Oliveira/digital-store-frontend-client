@@ -142,12 +142,14 @@ export default function ProductViewPage() {
               alt={slide.alt || `Slide ${index + 1}`}
               className="max-w-[85%] max-h-[85%] object-contain product-image-hover-zoom"
               onMouseMove={(e) => {
+                if (window.innerWidth < 1024) return
                 const rect = e.currentTarget.getBoundingClientRect()
                 const x = ((e.clientX - rect.left) / rect.width) * 100
                 const y = ((e.clientY - rect.top) / rect.height) * 100
                 e.currentTarget.style.transformOrigin = `${x}% ${y}%`
               }}
               onMouseLeave={(e) => {
+                if (window.innerWidth < 1024) return
                 e.currentTarget.style.transformOrigin = 'center center'
               }}
             />

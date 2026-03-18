@@ -9,42 +9,7 @@ const formatPrice = (value: number) =>
     currency: 'BRL'
   }).format(value)
 
-interface OrderSuccessData {
-  id: string
-  status: string
-  created_at: string
-  personal_info: {
-    full_name: string
-    cpf: string
-    email: string
-    phone: string
-  }
-  delivery_address: {
-    address: string
-    neighborhood: string
-    city: string
-    cep: string
-    complement?: string
-  }
-  payment_info: {
-    method: string
-    installments?: number
-  }
-  items: {
-    id: string
-    product_id: string
-    product_name: string
-    image_url: string
-    quantity: number
-    price_at_purchase: number
-  }[]
-  summary: {
-    subtotal: number
-    shipping: number
-    discount: number
-    total: number
-  }
-}
+import type { Order as OrderSuccessData } from '@/types/Order'
 
 export default function OrderSuccessPage() {
   const { id } = useParams<{ id: string }>()
@@ -144,10 +109,10 @@ export default function OrderSuccessPage() {
                 Informações Pessoais
               </h2>
               <div className="space-y-3">
-                <InfoRow label="Nome" value={order.personal_info.full_name} />
-                <InfoRow label="CPF" value={order.personal_info.cpf} />
-                <InfoRow label="Email" value={order.personal_info.email} />
-                <InfoRow label="Celular" value={order.personal_info.phone} />
+                <InfoRow label="Nome" value={order.personal_info?.full_name ?? ''} />
+                <InfoRow label="CPF" value={order.personal_info?.cpf ?? ''} />
+                <InfoRow label="Email" value={order.personal_info?.email ?? ''} />
+                <InfoRow label="Celular" value={order.personal_info?.phone ?? ''} />
               </div>
             </div>
 
@@ -159,14 +124,14 @@ export default function OrderSuccessPage() {
               <div className="space-y-3">
                 <InfoRow
                   label="Endereço"
-                  value={order.delivery_address.address}
+                  value={order.delivery_address?.address ?? ''}
                 />
                 <InfoRow
                   label="Bairro"
-                  value={order.delivery_address.neighborhood}
+                  value={order.delivery_address?.neighborhood ?? ''}
                 />
-                <InfoRow label="Cidade" value={order.delivery_address.city} />
-                <InfoRow label="CEP" value={order.delivery_address.cep} />
+                <InfoRow label="Cidade" value={order.delivery_address?.city ?? ''} />
+                <InfoRow label="CEP" value={order.delivery_address?.cep ?? ''} />
               </div>
             </div>
 
@@ -179,18 +144,12 @@ export default function OrderSuccessPage() {
                 <InfoRow
                   label="Método"
                   value={
-                    order.payment_info.method === 'credit-card'
+                    order.payment_info?.method === 'credit-card'
                       ? 'Cartão de Crédito (Simulação)'
                       : 'Boleto Bancário'
                   }
                 />
-                {order.payment_info.method === 'credit-card'
-                  && order.payment_info.installments && (
-                    <InfoRow
-                      label="Parcelas"
-                      value={`${order.payment_info.installments}x`}
-                    />
-                  )}
+                {/* Removed Installments Row */}
               </div>
             </div>
 
@@ -223,18 +182,8 @@ export default function OrderSuccessPage() {
                 Total
               </span>
               <span className="block text-2xl font-bold text-dark-gray-2 mb-1">
-                {formatPrice(order.summary.total)}
+                {formatPrice(order.summary?.total ?? 0)}
               </span>
-              {order.payment_info.method === 'credit-card'
-                && order.payment_info.installments && (
-                  <span className="block text-xs text-light-gray-2">
-                    ou {order.payment_info.installments}x de{' '}
-                    {formatPrice(
-                      order.summary.total / order.payment_info.installments
-                    )}{' '}
-                    sem juros
-                  </span>
-                )}
             </div>
 
             {/* Actions */}

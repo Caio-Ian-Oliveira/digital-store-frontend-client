@@ -10,6 +10,7 @@ import HomePage from '@/pages/HomePage'
 import Layout from '@/pages/Layout'
 import MyInfoPage from '@/pages/MyInfoPage'
 import MyOrdersPage from '@/pages/MyOrdersPage'
+import OrderDetailPage from '@/pages/MyOrdersPage/OrderDetailPage'
 import MyPaymentMethodsPage from '@/pages/MyPaymentMethodsPage'
 import MyProfilePage from '@/pages/MyProfilePage'
 import { NotFoundPage } from '@/pages/NotFoundPage'
@@ -47,6 +48,7 @@ export function MainRouter() {
             <Route path="/checkout/:id" element={<CheckoutPage />} />
             <Route path="/order/:id/success" element={<OrderSuccessPage />} />
             <Route path="/meus-pedidos" element={<MyOrdersPage />} />
+            <Route path="/meus-pedidos/:id" element={<OrderDetailPage />} />
             <Route path="/minhas-informacoes" element={<MyInfoPage />} />
             <Route
               path="/metodos-pagamento"
