@@ -1,16 +1,16 @@
+import {
+  createContext,
+  type ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState
+} from 'react'
 import { api } from '@/lib/api'
 import { type ApiProduct, mapApiProduct } from '@/services/productService'
 import type { CartItem } from '@/types/CartItem'
 import type { Product } from '@/types/Product'
-import {
-    createContext,
-    type ReactNode,
-    useCallback,
-    useContext,
-    useEffect,
-    useMemo,
-    useState
-} from 'react'
 import { useAuth } from './AuthContext'
 
 interface CartContextType {
@@ -117,7 +117,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         return
       }
 
-      // Update Otimista: Adiciona ao estado local antes da resposta da API 
+      // Update Otimista: Adiciona ao estado local antes da resposta da API
       // para que o usuário veja a mudança imediatamente.
       setItems((prev) => {
         // Find if this exact combination already exists locally

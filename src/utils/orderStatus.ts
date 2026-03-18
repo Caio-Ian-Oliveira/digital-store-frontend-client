@@ -1,11 +1,13 @@
 export const statusMap: Record<string, { label: string; className: string }> = {
   pending: {
     label: 'Aguardando Pagamento',
-    className: 'bg-amber-100 text-amber-800 px-3 py-1 rounded-full font-semibold'
+    className:
+      'bg-amber-100 text-amber-800 px-3 py-1 rounded-full font-semibold'
   },
   completed: {
     label: 'Pago',
-    className: 'bg-green-100 text-green-800 px-3 py-1 rounded-full font-semibold'
+    className:
+      'bg-green-100 text-green-800 px-3 py-1 rounded-full font-semibold'
   },
   shipped: {
     label: 'Em Rota de Entrega',
@@ -25,7 +27,8 @@ export function getStatusInfo(status: string) {
   return (
     statusMap[status] ?? {
       label: 'Pago',
-      className: 'bg-green-100 text-green-800 px-3 py-1 rounded-full font-semibold'
+      className:
+        'bg-green-100 text-green-800 px-3 py-1 rounded-full font-semibold'
     }
   )
 }

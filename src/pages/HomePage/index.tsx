@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query'
 import { Gallery } from '@/components/Gallery'
 import { HeroSlide } from '@/components/HeroSlide'
 import ProductCard from '@/components/ProductCard'
@@ -5,9 +6,8 @@ import { ProductCardSkeleton } from '@/components/ProductCardSkeleton'
 import RouterLink from '@/components/RouterLink'
 import Section from '@/components/Section'
 import { Skeleton } from '@/components/ui/skeleton'
-import { getProducts } from '@/services/productService'
 import { categoriesData } from '@/data/categories'
-import { useQuery } from '@tanstack/react-query'
+import { getProducts } from '@/services/productService'
 
 // Dados do Hero Banner (Seção 5.1)
 const heroSlides = [
@@ -55,7 +55,7 @@ const collections = [
 
 /**
  * Página Inicial (Home).
- * Contém o Hero Banner (Gallery), Coleções em Destaque, 
+ * Contém o Hero Banner (Gallery), Coleções em Destaque,
  * Categorias Rápidas e a vitrine de "Produtos em Alta" buscados via API.
  */
 export default function HomePage() {
@@ -172,8 +172,8 @@ export default function HomePage() {
             </div>
           ) : isLoading ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6 lg:gap-x-8 lg:gap-y-6">
-              {Array.from({ length: 8 }).map((_, index) => (
-                <div key={index} className="h-full w-full">
+              {['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'h7', 'h8'].map((id) => (
+                <div key={id} className="h-full w-full">
                   <ProductCardSkeleton />
                 </div>
               ))}
@@ -201,7 +201,7 @@ export default function HomePage() {
             {/* Imagem do Tênis com Eclipse de fundo */}
             <div className="flex-1 flex justify-center relative">
               {/* Eclipse de fundo */}
-              <div 
+              <div
                 className="absolute inset-x-0 -top-4 bottom-0 z-0 flex items-center justify-center opacity-70"
                 aria-hidden="true"
               >

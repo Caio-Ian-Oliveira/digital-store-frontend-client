@@ -42,7 +42,7 @@ export default function ProductCard({
       aria-label={`Ver detalhes de ${name}`}
     >
       {/* Área da Imagem — Mobile: 163x179px | Desktop: 292x321px */}
-      <div 
+      <div
         className="relative w-full flex items-center justify-center shrink-0 overflow-hidden"
         style={{ aspectRatio: 'var(--img-ratio)' }}
       >

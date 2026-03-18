@@ -1,20 +1,20 @@
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { Filter } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { FilterGroup } from '@/components/FilterGroup'
 import { Pagination } from '@/components/Pagination'
 import ProductCard from '@/components/ProductCard'
 import { ProductCardSkeleton } from '@/components/ProductCardSkeleton'
 import {
-    Sheet,
-    SheetContent,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger
 } from '@/components/ui/sheet'
 import { getProducts } from '@/services/productService'
 import type { Product } from '@/types/Product'
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { Filter } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
 
 /**
  * Página de Listagem de Produtos.
@@ -35,7 +35,7 @@ export default function ProductListingPage() {
   // Reseta para a página 1 ao mudar qualquer filtro
   useEffect(() => {
     setPage(1)
-  }, [filter, categoryParam, filterBrand, filterCategory, filterGender, sortOrder])
+  }, [])
 
   const {
     data: response,
@@ -249,7 +249,11 @@ export default function ProductListingPage() {
         {/* Área Principal de Produtos */}
         <main>
           <h1 className="text-dark-gray-2 text-lg md:text-2xl font-bold mb-2 md:mb-4">
-            {filter ? `Resultados para "${filter}"` : categoryParam ? `Categoria: ${categoryParam}` : 'Todos os produtos'}
+            {filter
+              ? `Resultados para "${filter}"`
+              : categoryParam
+                ? `Categoria: ${categoryParam}`
+                : 'Todos os produtos'}
           </h1>
           <p className="text-dark-gray-2 text-sm md:text-base mb-4 md:mb-6">
             {productCount}{' '}
@@ -274,8 +278,21 @@ export default function ProductListingPage() {
             </div>
           ) : isLoading ? (
             <div className="grid grid-cols-2 min-[426px]:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-2 sm:gap-4 md:gap-6 lg:gap-x-8 lg:gap-y-6">
-              {Array.from({ length: 12 }).map((_, index) => (
-                <div key={index} className="h-full w-full">
+              {[
+                'l1',
+                'l2',
+                'l3',
+                'l4',
+                'l5',
+                'l6',
+                'l7',
+                'l8',
+                'l9',
+                'l10',
+                'l11',
+                'l12'
+              ].map((id) => (
+                <div key={id} className="h-full w-full">
                   <ProductCardSkeleton />
                 </div>
               ))}
@@ -288,7 +305,9 @@ export default function ProductListingPage() {
             </div>
           ) : (
             <>
-              <div className={`min-h-[800px] content-start grid grid-cols-2 min-[426px]:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-2 sm:gap-4 md:gap-6 lg:gap-x-8 lg:gap-y-6 transition-opacity duration-200 ${isFetching ? 'opacity-50 pointer-events-none' : ''}`}>
+              <div
+                className={`min-h-[800px] content-start grid grid-cols-2 min-[426px]:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-2 sm:gap-4 md:gap-6 lg:gap-x-8 lg:gap-y-6 transition-opacity duration-200 ${isFetching ? 'opacity-50 pointer-events-none' : ''}`}
+              >
                 {products.map((product, idx) => (
                   <ProductCard
                     key={`${product.id}-${idx}`}

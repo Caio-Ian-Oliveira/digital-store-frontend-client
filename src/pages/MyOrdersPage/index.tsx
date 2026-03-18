@@ -1,10 +1,10 @@
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
+import { NavLink } from 'react-router-dom'
 import { Pagination } from '@/components/Pagination'
 import ProfileLayout from '@/components/ProfileLayout'
 import { useAuth } from '@/contexts/AuthContext'
 import { api } from '@/lib/api'
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
 
 /* ─── Tipos ─── */
 
@@ -72,8 +72,8 @@ function OrderRow({ order }: { order: Order }) {
             {statusInfo.label}
           </span>
         </div>
-        
-        <NavLink 
+
+        <NavLink
           to={`/meus-pedidos/${order.id}`}
           className="text-[12px] font-medium text-primary underline hover:text-tertiary transition-colors"
         >
@@ -98,16 +98,17 @@ export default function MyOrdersPage() {
   } = useQuery({
     queryKey: ['orders', page],
     queryFn: async () => {
-      const { data } = await api.get<Order[] | { data: Order[]; total: number }>(
-        '/orders',
-        {
-          params: { limit: 4, page }
-        }
-      )
+      const { data } = await api.get<
+        Order[] | { data: Order[]; total: number }
+      >('/orders', {
+        params: { limit: 4, page }
+      })
 
-      const items = Array.isArray(data) ? data : (data?.data || [])
-      const totalItems = Array.isArray(data) ? data.length : (data?.total || items.length)
-      
+      const items = Array.isArray(data) ? data : data?.data || []
+      const totalItems = Array.isArray(data)
+        ? data.length
+        : data?.total || items.length
+
       const ordersArray = (Array.isArray(items) ? [...items] : []) as Order[]
       // Ordem cronológica decrescente para pedidos mais recentes no topo
       ordersArray.sort(
@@ -139,66 +140,68 @@ export default function MyOrdersPage() {
       <div className="flex-1 flex flex-col relative">
         {/* Loading */}
         {isLoading && (
-        <div className="space-y-4 py-4">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="flex items-center gap-4 animate-pulse">
-              <div className="w-16 h-16 bg-light-gray-3 rounded" />
-              <div className="flex-1 space-y-2">
-                <div className="h-3 bg-light-gray-3 rounded w-24" />
-                <div className="h-4 bg-light-gray-3 rounded w-48" />
+          <div className="space-y-4 py-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="flex items-center gap-4 animate-pulse">
+                <div className="w-16 h-16 bg-light-gray-3 rounded" />
+                <div className="flex-1 space-y-2">
+                  <div className="h-3 bg-light-gray-3 rounded w-24" />
+                  <div className="h-4 bg-light-gray-3 rounded w-48" />
+                </div>
+                <div className="h-4 bg-light-gray-3 rounded w-28" />
               </div>
-              <div className="h-4 bg-light-gray-3 rounded w-28" />
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Error */}
-      {!isLoading && error && (
-        <div className="py-12 text-center">
-          <p className="text-error font-medium mb-4">{error.message}</p>
-          <button
-            type="button"
-            onClick={() => window.location.reload()}
-            className="text-sm text-primary underline hover:text-tertiary transition-colors cursor-pointer"
-          >
-            Tentar novamente
-          </button>
-        </div>
-      )}
-
-      {/* Empty State */}
-      {!isLoading && !error && orders.length === 0 && (
-        <div className="py-16 text-center">
-          <p className="text-light-gray text-sm mb-4">
-            Você ainda não possui nenhum pedido.
-          </p>
-          <NavLink
-            to="/products"
-            className="inline-flex items-center justify-center h-10 px-6 bg-primary text-white text-sm font-semibold rounded-full hover:bg-tertiary transition-colors"
-          >
-            Explorar Produtos
-          </NavLink>
-        </div>
-      )}
-
-      {/* Order List */}
-      {!isLoading && !error && orders.length > 0 && (
-        <div className={`pb-8 flex flex-col justify-between min-h-[500px] transition-opacity duration-200 ${isFetching ? 'opacity-50 pointer-events-none' : ''}`}>
-          <div>
-            {orders.map((order) => (
-              <OrderRow key={order.id} order={order} />
             ))}
           </div>
+        )}
 
-          <Pagination 
-            currentPage={page}
-            limit={4}
-            totalItems={total}
-            onPageChange={setPage}
-          />
-        </div>
-      )}
+        {/* Error */}
+        {!isLoading && error && (
+          <div className="py-12 text-center">
+            <p className="text-error font-medium mb-4">{error.message}</p>
+            <button
+              type="button"
+              onClick={() => window.location.reload()}
+              className="text-sm text-primary underline hover:text-tertiary transition-colors cursor-pointer"
+            >
+              Tentar novamente
+            </button>
+          </div>
+        )}
+
+        {/* Empty State */}
+        {!isLoading && !error && orders.length === 0 && (
+          <div className="py-16 text-center">
+            <p className="text-light-gray text-sm mb-4">
+              Você ainda não possui nenhum pedido.
+            </p>
+            <NavLink
+              to="/products"
+              className="inline-flex items-center justify-center h-10 px-6 bg-primary text-white text-sm font-semibold rounded-full hover:bg-tertiary transition-colors"
+            >
+              Explorar Produtos
+            </NavLink>
+          </div>
+        )}
+
+        {/* Order List */}
+        {!isLoading && !error && orders.length > 0 && (
+          <div
+            className={`pb-8 flex flex-col justify-between min-h-[500px] transition-opacity duration-200 ${isFetching ? 'opacity-50 pointer-events-none' : ''}`}
+          >
+            <div>
+              {orders.map((order) => (
+                <OrderRow key={order.id} order={order} />
+              ))}
+            </div>
+
+            <Pagination
+              currentPage={page}
+              limit={4}
+              totalItems={total}
+              onPageChange={setPage}
+            />
+          </div>
+        )}
       </div>
     </ProfileLayout>
   )

@@ -1,19 +1,20 @@
-import {
-    Carousel,
-    type CarouselApi,
-    CarouselContent,
-    CarouselItem
-} from '@/components/ui/carousel'
-import { cn } from '@/lib/utils'
 import Autoplay from 'embla-carousel-autoplay'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import {
-    type CSSProperties,
-    type ReactNode,
-    useEffect,
-    useRef,
-    useState
+  type CSSProperties,
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState
 } from 'react'
+import {
+  Carousel,
+  type CarouselApi,
+  CarouselContent,
+  CarouselItem
+} from '@/components/ui/carousel'
+import { cn } from '@/lib/utils'
 
 export interface GallerySlide {
   src: string
@@ -62,20 +63,20 @@ export function Gallery({
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true) // Assumindo verdadeiro inicialmente se houver muitas
 
-  const checkScroll = () => {
+  const checkScroll = useCallback(() => {
     if (thumbContainerRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = thumbContainerRef.current
       setCanScrollLeft(scrollLeft > 0)
       setCanScrollRight(Math.ceil(scrollLeft + clientWidth) < scrollWidth)
     }
-  }
+  }, [])
 
   // Verificar o scroll na inicialização e resize
   useEffect(() => {
     checkScroll()
     window.addEventListener('resize', checkScroll)
     return () => window.removeEventListener('resize', checkScroll)
-  }, [slides.length])
+  }, [checkScroll])
 
   const scrollThumbs = (direction: 'left' | 'right') => {
     if (thumbContainerRef.current) {
@@ -174,7 +175,8 @@ export function Gallery({
                 style={{
                   width: width,
                   height: height,
-                  backgroundColor: slide.style?.backgroundColor || 'transparent',
+                  backgroundColor:
+                    slide.style?.backgroundColor || 'transparent',
                   ...slide.style
                 }}
               >

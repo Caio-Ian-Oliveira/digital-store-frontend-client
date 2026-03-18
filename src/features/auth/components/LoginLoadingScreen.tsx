@@ -1,6 +1,6 @@
-import logoHeader from '@/assets/logo-header.svg'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import logoHeader from '@/assets/images/logo-header.svg'
 
 /**
  * Tela de carregamento exibida após login bem-sucedido.

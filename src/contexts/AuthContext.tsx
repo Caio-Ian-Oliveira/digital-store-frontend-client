@@ -1,9 +1,9 @@
 import {
-    createContext,
-    type ReactNode,
-    useContext,
-    useEffect,
-    useState
+  createContext,
+  type ReactNode,
+  useContext,
+  useEffect,
+  useState
 } from 'react'
 
 export interface User {
@@ -30,7 +30,7 @@ interface AuthContextType {
 
 /**
  * Contexto de Autenticação da Digital Store.
- * Centraliza o estado do usuário logado, persistência no localStorage 
+ * Centraliza o estado do usuário logado, persistência no localStorage
  * e métodos de login/logout para toda a aplicação.
  */
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -68,7 +68,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(null)
     try {
       localStorage.removeItem('@DigitalStore:user')
-    } catch (e) {
+    } catch (_e) {
       // Ignora erro
     }
   }

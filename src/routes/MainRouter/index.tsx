@@ -1,3 +1,4 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { ScrollToTop } from '@/components/ScrollToTop'
 import { ProtectedRoute } from '@/features/auth/components/ProtectedRoute'
 import LoginPage from '@/features/auth/pages/LoginPage'
@@ -17,12 +18,11 @@ import { NotFoundPage } from '@/pages/NotFoundPage'
 import OrderSuccessPage from '@/pages/OrderSuccessPage'
 import ProductListingPage from '@/pages/ProductListingPage'
 import ProductViewPage from '@/pages/ProductViewPage'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 /**
  * Componente principal de roteamento.
  * Utiliza o React Router DOM para gerenciar a navegação.
- * As rotas são divididas entre Públicas (acessíveis a todos) 
+ * As rotas são divididas entre Públicas (acessíveis a todos)
  * e Protegidas (exigem login ativo).
  */
 export function MainRouter() {

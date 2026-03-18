@@ -72,7 +72,7 @@ export interface GetProductsOptions {
 
 /**
  * Busca todos os produtos da API com suporte a filtros reais.
- * 
+ *
  * @param options - Critérios de busca (página, limite, marca, gênero, etc.)
  * @returns Resposta paginada contendo os produtos mapeados para o formato do Frontend.
  */
@@ -102,7 +102,7 @@ export const getProducts = async (
 
 /**
  * Busca um produto específico pelo seu ID numérico/UUID.
- * 
+ *
  * @param id - Identificador único do produto.
  * @returns O produto mapeado ou undefined caso não seja encontrado.
  */

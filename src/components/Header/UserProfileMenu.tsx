@@ -21,22 +21,18 @@ export const UserProfileMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false)
 
-  const menuRef = useRef<HTMLDivElement>(null)
+  const menuRef = useRef<HTMLButtonElement>(null)
 
-  // Fecha o menu se clicar fora
+  // Ocultar menu ao clicar fora
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    function handleClickOutside(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsMenuOpen(false)
       }
     }
-    if (isMenuOpen) {
-      document.addEventListener('mousedown', handleClickOutside)
-    }
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [isMenuOpen])
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   const handleOpenLogoutModal = () => {
     setIsMenuOpen(false) // Fecha o dropdown ao abrir o modal
@@ -56,8 +52,9 @@ export const UserProfileMenu = () => {
 
   return (
     <>
-      <div
-        className="relative flex items-center gap-2 cursor-pointer"
+      <button
+        type="button"
+        className="relative flex items-center gap-2 cursor-pointer bg-transparent border-none p-0"
         ref={menuRef}
         onClick={() => setIsMenuOpen(!isMenuOpen)}
       >
@@ -93,7 +90,7 @@ export const UserProfileMenu = () => {
             </div>
           </div>
         )}
-      </div>
+      </button>
 
       {/* Logout Confirmation Modal */}
       <Dialog open={isLogoutModalOpen} onOpenChange={setIsLogoutModalOpen}>

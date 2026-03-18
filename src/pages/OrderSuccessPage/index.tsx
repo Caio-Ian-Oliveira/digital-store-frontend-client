@@ -1,7 +1,7 @@
-import { Button } from '@/components/ui/button'
-import { api } from '@/lib/api'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
+import { api } from '@/lib/api'
 
 const formatPrice = (value: number) =>
   new Intl.NumberFormat('pt-BR', {
@@ -24,7 +24,7 @@ export default function OrderSuccessPage() {
         setIsLoading(true)
         const { data } = await api.get<OrderSuccessData>(`/orders/${id}`)
         setOrder(data)
-      } catch (err: any) {
+      } catch (err) {
         console.error('Erro ao carregar pedido:', err)
         setError('Não foi possível carregar os detalhes deste pedido.')
       } finally {
@@ -109,10 +109,19 @@ export default function OrderSuccessPage() {
                 Informações Pessoais
               </h2>
               <div className="space-y-3">
-                <InfoRow label="Nome" value={order.personal_info?.full_name ?? ''} />
+                <InfoRow
+                  label="Nome"
+                  value={order.personal_info?.full_name ?? ''}
+                />
                 <InfoRow label="CPF" value={order.personal_info?.cpf ?? ''} />
-                <InfoRow label="Email" value={order.personal_info?.email ?? ''} />
-                <InfoRow label="Celular" value={order.personal_info?.phone ?? ''} />
+                <InfoRow
+                  label="Email"
+                  value={order.personal_info?.email ?? ''}
+                />
+                <InfoRow
+                  label="Celular"
+                  value={order.personal_info?.phone ?? ''}
+                />
               </div>
             </div>
 
@@ -130,8 +139,14 @@ export default function OrderSuccessPage() {
                   label="Bairro"
                   value={order.delivery_address?.neighborhood ?? ''}
                 />
-                <InfoRow label="Cidade" value={order.delivery_address?.city ?? ''} />
-                <InfoRow label="CEP" value={order.delivery_address?.cep ?? ''} />
+                <InfoRow
+                  label="Cidade"
+                  value={order.delivery_address?.city ?? ''}
+                />
+                <InfoRow
+                  label="CEP"
+                  value={order.delivery_address?.cep ?? ''}
+                />
               </div>
             </div>
 
@@ -189,6 +204,7 @@ export default function OrderSuccessPage() {
             {/* Actions */}
             <div className="flex flex-col items-center justify-center gap-6 w-full">
               <button
+                type="button"
                 onClick={() => window.print()}
                 className="text-light-gray text-sm underline hover:text-dark-gray-2 transition-colors cursor-pointer"
               >

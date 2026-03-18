@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { type ReactNode, useEffect, useRef, useState } from 'react'
+import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
 /* ─── Sidebar Links ─── */
@@ -18,20 +18,22 @@ export default function ProfileLayout({ children }: { children: ReactNode }) {
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(false)
 
-  const checkScroll = () => {
+  const checkScroll = useCallback(() => {
     if (scrollContainerRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } =
         scrollContainerRef.current
-      setCanScrollLeft(scrollLeft > 0)
-      setCanScrollRight(Math.ceil(scrollLeft + clientWidth) < scrollWidth)
+      const canScrollL = scrollLeft > 0
+      const canScrollR = Math.ceil(scrollLeft + clientWidth) < scrollWidth
+      setCanScrollLeft(canScrollL)
+      setCanScrollRight(canScrollR)
     }
-  }
+  }, [])
 
   useEffect(() => {
     checkScroll() // Verificação inicial
     window.addEventListener('resize', checkScroll)
     return () => window.removeEventListener('resize', checkScroll)
-  }, [])
+  }, [checkScroll])
 
   const scrollBy = (offset: number) => {
     if (scrollContainerRef.current) {
