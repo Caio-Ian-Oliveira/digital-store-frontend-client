@@ -383,6 +383,8 @@
   transition: transform 0.2s ease;
 }
 
-.product-image-hover-zoom:hover {
-  transform: scale(3.5);
+@media (min-width: 1024px) {
+  .product-image-hover-zoom:hover {
+    transform: scale(3.5);
+  }
 }

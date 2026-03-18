@@ -107,7 +107,7 @@ export default function CheckoutPage() {
   // Determina quais itens exibir: carrinho ou produto individual
   const cartItems = id
     ? singleProduct
-      ? [{ product: singleProduct, quantity: 1, id: 'temp-direct-buy' }] // ID finto do cart item pra bater com a tipagem da lista
+      ? [{ product: singleProduct, quantity: 1, id: 'temp-direct-buy' }]
       : []
     : cart.items
 
@@ -134,8 +134,7 @@ export default function CheckoutPage() {
           complement: data.complement || ''
         },
         payment: {
-          method: data.paymentMethod,
-          installments: 10
+          method: data.paymentMethod
         }
       }
 
@@ -145,7 +144,7 @@ export default function CheckoutPage() {
       // Aguarda 1.5s para simular processamento e dar feedback visual ao usuário
       await new Promise((resolve) => setTimeout(resolve, 1500))
 
-      // Limpa os dados do contexto localmente (o backend limpou no banco já)
+      // Limpa os dados do contexto localmente
       await cart.fetchCart()
 
       // Redireciona para o Sucesso usando order_id retornado
@@ -187,7 +186,7 @@ export default function CheckoutPage() {
     )
   }
 
-  // Calculate order values from items
+  // Calculate order values
   const subtotal = cartItems.reduce((acc, item) => {
     const price = item.product.priceDiscount || item.product.price
     return acc + price * item.quantity
@@ -197,23 +196,20 @@ export default function CheckoutPage() {
   const discount = id
     ? cartItems.reduce((acc, item) => {
         if (
-          item.product.priceDiscount
-          && item.product.priceDiscount < item.product.price
+          item.product.priceDiscount &&
+          item.product.priceDiscount < item.product.price
         ) {
           return (
-            acc
-            + (item.product.price - item.product.priceDiscount) * item.quantity
+            acc + (item.product.price - item.product.priceDiscount) * item.quantity
           )
         }
         return acc
       }, 0)
     : cart.discount
+
   const total = subtotal - (id ? 0 : discount) + shipping
 
-  const installmentValue =
-    total > 0 ? (total / 10).toFixed(2).replace('.', ',') : '0,00'
-
-  // Componente de Resumo reutilizável para Mobile e Desktop
+  // Componente de Resumo reutilizável
   const SummaryContent = () => (
     <>
       <div className="mb-6 pb-6 border-b border-light-gray-3 space-y-4">
@@ -240,7 +236,6 @@ export default function CheckoutPage() {
         ))}
       </div>
 
-      {/* Order Values */}
       <div className="space-y-3 mb-6">
         <div className="flex justify-between text-sm">
           <span className="text-light-gray-2">Subtotal:</span>
@@ -262,7 +257,6 @@ export default function CheckoutPage() {
         </div>
       </div>
 
-      {/* Total Section Box */}
       <div className="bg-[#F6AA1C]/10 rounded-lg p-4 mb-6">
         <div className="flex items-center justify-between">
           <span className="text-base font-bold text-dark-gray-2">Total</span>
@@ -270,14 +264,10 @@ export default function CheckoutPage() {
             <span className="text-xl font-bold text-dark-gray-2">
               {formatPrice(total)}
             </span>
-            <p className="text-xs text-dark-gray-2">
-              ou 10x de R$ {installmentValue} sem juros
-            </p>
           </div>
         </div>
       </div>
 
-      {/* Button Desktop */}
       <Button
         type="submit"
         form="checkout-form"
@@ -291,7 +281,6 @@ export default function CheckoutPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 lg:px-8 py-6 lg:py-12 bg-[#F9F8FE] lg:bg-transparent">
-      {/* Page Title */}
       <h1 className="text-2xl font-bold text-dark-gray-2 mb-6 lg:text-[32px] lg:mb-8">
         Finalizar Compra
       </h1>
@@ -302,20 +291,14 @@ export default function CheckoutPage() {
         </div>
       )}
 
-      {/* Two Column Layout */}
       <div className="flex flex-col lg:flex-row gap-8">
-        {/* Left Column - Forms */}
         <div className="w-full lg:flex-1 lg:min-w-0">
           <form id="checkout-form" onSubmit={handleSubmit(onSubmit)}>
-            {/* Block 1 - Personal Information */}
             <div className="bg-white rounded-lg p-0 lg:p-6 mb-6">
               <Section title="Informações Pessoais">
                 <div className="space-y-5">
                   <div className="space-y-2">
-                    <Label
-                      htmlFor="fullName"
-                      className="text-xs font-bold text-dark-gray-2"
-                    >
+                    <Label htmlFor="fullName" className="text-xs font-bold text-dark-gray-2">
                       Nome Completo <span className="text-[#ED1A5A]">*</span>
                     </Label>
                     <Input
@@ -324,18 +307,11 @@ export default function CheckoutPage() {
                       {...register('fullName')}
                       className={`bg-light-gray-3 border-0 h-12 rounded-lg text-dark-gray-2 placeholder:text-light-gray-2 focus-visible:ring-primary ${errors.fullName ? 'ring-1 ring-error' : ''}`}
                     />
-                    {errors.fullName && (
-                      <p className="text-xs text-error mt-1">
-                        {errors.fullName.message}
-                      </p>
-                    )}
+                    {errors.fullName && <p className="text-xs text-error mt-1">{errors.fullName.message}</p>}
                   </div>
 
                   <div className="space-y-2">
-                    <Label
-                      htmlFor="cpf"
-                      className="text-xs font-bold text-dark-gray-2"
-                    >
+                    <Label htmlFor="cpf" className="text-xs font-bold text-dark-gray-2">
                       CPF <span className="text-[#ED1A5A]">*</span>
                     </Label>
                     <Input
@@ -344,18 +320,11 @@ export default function CheckoutPage() {
                       {...register('cpf')}
                       className={`bg-light-gray-3 border-0 h-12 rounded-lg text-dark-gray-2 placeholder:text-light-gray-2 focus-visible:ring-primary ${errors.cpf ? 'ring-1 ring-error' : ''}`}
                     />
-                    {errors.cpf && (
-                      <p className="text-xs text-error mt-1">
-                        {errors.cpf.message}
-                      </p>
-                    )}
+                    {errors.cpf && <p className="text-xs text-error mt-1">{errors.cpf.message}</p>}
                   </div>
 
                   <div className="space-y-2">
-                    <Label
-                      htmlFor="email"
-                      className="text-xs font-bold text-dark-gray-2"
-                    >
+                    <Label htmlFor="email" className="text-xs font-bold text-dark-gray-2">
                       E-mail <span className="text-[#ED1A5A]">*</span>
                     </Label>
                     <Input
@@ -365,18 +334,11 @@ export default function CheckoutPage() {
                       {...register('email')}
                       className={`bg-light-gray-3 border-0 h-12 rounded-lg text-dark-gray-2 placeholder:text-light-gray-2 focus-visible:ring-primary ${errors.email ? 'ring-1 ring-error' : ''}`}
                     />
-                    {errors.email && (
-                      <p className="text-xs text-error mt-1">
-                        {errors.email.message}
-                      </p>
-                    )}
+                    {errors.email && <p className="text-xs text-error mt-1">{errors.email.message}</p>}
                   </div>
 
                   <div className="space-y-2">
-                    <Label
-                      htmlFor="phone"
-                      className="text-xs font-bold text-dark-gray-2"
-                    >
+                    <Label htmlFor="phone" className="text-xs font-bold text-dark-gray-2">
                       Celular <span className="text-[#ED1A5A]">*</span>
                     </Label>
                     <Input
@@ -386,25 +348,17 @@ export default function CheckoutPage() {
                       {...register('phone')}
                       className={`bg-light-gray-3 border-0 h-12 rounded-lg text-dark-gray-2 placeholder:text-light-gray-2 focus-visible:ring-primary ${errors.phone ? 'ring-1 ring-error' : ''}`}
                     />
-                    {errors.phone && (
-                      <p className="text-xs text-error mt-1">
-                        {errors.phone.message}
-                      </p>
-                    )}
+                    {errors.phone && <p className="text-xs text-error mt-1">{errors.phone.message}</p>}
                   </div>
                 </div>
               </Section>
             </div>
 
-            {/* Block 2 - Delivery Information */}
             <div className="bg-white rounded-lg p-0 lg:p-6 mb-6">
               <Section title="Informações de Entrega">
                 <div className="space-y-5">
                   <div className="space-y-2">
-                    <Label
-                      htmlFor="address"
-                      className="text-xs font-bold text-dark-gray-2"
-                    >
+                    <Label htmlFor="address" className="text-xs font-bold text-dark-gray-2">
                       Endereço <span className="text-[#ED1A5A]">*</span>
                     </Label>
                     <Input
@@ -413,18 +367,11 @@ export default function CheckoutPage() {
                       {...register('address')}
                       className={`bg-light-gray-3 border-0 h-12 rounded-lg text-dark-gray-2 placeholder:text-light-gray-2 focus-visible:ring-primary ${errors.address ? 'ring-1 ring-error' : ''}`}
                     />
-                    {errors.address && (
-                      <p className="text-xs text-error mt-1">
-                        {errors.address.message}
-                      </p>
-                    )}
+                    {errors.address && <p className="text-xs text-error mt-1">{errors.address.message}</p>}
                   </div>
 
                   <div className="space-y-2">
-                    <Label
-                      htmlFor="neighborhood"
-                      className="text-xs font-bold text-dark-gray-2"
-                    >
+                    <Label htmlFor="neighborhood" className="text-xs font-bold text-dark-gray-2">
                       Bairro <span className="text-[#ED1A5A]">*</span>
                     </Label>
                     <Input
@@ -433,18 +380,11 @@ export default function CheckoutPage() {
                       {...register('neighborhood')}
                       className={`bg-light-gray-3 border-0 h-12 rounded-lg text-dark-gray-2 placeholder:text-light-gray-2 focus-visible:ring-primary ${errors.neighborhood ? 'ring-1 ring-error' : ''}`}
                     />
-                    {errors.neighborhood && (
-                      <p className="text-xs text-error mt-1">
-                        {errors.neighborhood.message}
-                      </p>
-                    )}
+                    {errors.neighborhood && <p className="text-xs text-error mt-1">{errors.neighborhood.message}</p>}
                   </div>
 
                   <div className="space-y-2">
-                    <Label
-                      htmlFor="city"
-                      className="text-xs font-bold text-dark-gray-2"
-                    >
+                    <Label htmlFor="city" className="text-xs font-bold text-dark-gray-2">
                       Cidade <span className="text-[#ED1A5A]">*</span>
                     </Label>
                     <Input
@@ -453,18 +393,11 @@ export default function CheckoutPage() {
                       {...register('city')}
                       className={`bg-light-gray-3 border-0 h-12 rounded-lg text-dark-gray-2 placeholder:text-light-gray-2 focus-visible:ring-primary ${errors.city ? 'ring-1 ring-error' : ''}`}
                     />
-                    {errors.city && (
-                      <p className="text-xs text-error mt-1">
-                        {errors.city.message}
-                      </p>
-                    )}
+                    {errors.city && <p className="text-xs text-error mt-1">{errors.city.message}</p>}
                   </div>
 
                   <div className="space-y-2">
-                    <Label
-                      htmlFor="cep"
-                      className="text-xs font-bold text-dark-gray-2"
-                    >
+                    <Label htmlFor="cep" className="text-xs font-bold text-dark-gray-2">
                       CEP <span className="text-[#ED1A5A]">*</span>
                     </Label>
                     <Input
@@ -473,18 +406,11 @@ export default function CheckoutPage() {
                       {...register('cep')}
                       className={`bg-light-gray-3 border-0 h-12 rounded-lg text-dark-gray-2 placeholder:text-light-gray-2 focus-visible:ring-primary ${errors.cep ? 'ring-1 ring-error' : ''}`}
                     />
-                    {errors.cep && (
-                      <p className="text-xs text-error mt-1">
-                        {errors.cep.message}
-                      </p>
-                    )}
+                    {errors.cep && <p className="text-xs text-error mt-1">{errors.cep.message}</p>}
                   </div>
 
                   <div className="space-y-2">
-                    <Label
-                      htmlFor="complement"
-                      className="text-xs font-bold text-dark-gray-2"
-                    >
+                    <Label htmlFor="complement" className="text-xs font-bold text-dark-gray-2">
                       Complemento
                     </Label>
                     <Input
@@ -498,48 +424,25 @@ export default function CheckoutPage() {
               </Section>
             </div>
 
-            {/* Block 3 - Payment Information */}
             <div className="bg-white rounded-lg p-0 lg:p-6 mb-6">
               <Section title="Informações de Pagamento">
                 <div className="space-y-6">
-                  {/* Payment Method Selection */}
                   <div className="space-y-3">
-                    <Label className="text-xs font-bold text-dark-gray-2">
-                      Forma de Pagamento
-                    </Label>
+                    <Label className="text-xs font-bold text-dark-gray-2">Forma de Pagamento</Label>
                     <RadioGroup
                       value={paymentMethod}
-                      onValueChange={(val) =>
-                        setValue(
-                          'paymentMethod',
-                          val as 'credit-card' | 'boleto'
-                        )
-                      }
+                      onValueChange={(val) => setValue('paymentMethod', val as 'credit-card' | 'boleto')}
                       className="flex flex-col gap-4"
                     >
                       <div className="flex items-center gap-3">
-                        <RadioGroupItem
-                          value="credit-card"
-                          id="credit-card"
-                          className="text-[#ED1A5A] border-light-gray-2"
-                        />
-                        <Label
-                          htmlFor="credit-card"
-                          className="text-sm text-dark-gray-2 font-normal cursor-pointer"
-                        >
+                        <RadioGroupItem value="credit-card" id="credit-card" className="text-[#ED1A5A] border-light-gray-2" />
+                        <Label htmlFor="credit-card" className="text-sm text-dark-gray-2 font-normal cursor-pointer">
                           Cartão de Crédito
                         </Label>
                       </div>
                       <div className="flex items-center gap-3">
-                        <RadioGroupItem
-                          value="boleto"
-                          id="boleto"
-                          className="text-[#ED1A5A] border-light-gray-2"
-                        />
-                        <Label
-                          htmlFor="boleto"
-                          className="text-sm text-dark-gray-2 font-normal cursor-pointer"
-                        >
+                        <RadioGroupItem value="boleto" id="boleto" className="text-[#ED1A5A] border-light-gray-2" />
+                        <Label htmlFor="boleto" className="text-sm text-dark-gray-2 font-normal cursor-pointer">
                           Boleto Bancário
                         </Label>
                       </div>
@@ -550,8 +453,7 @@ export default function CheckoutPage() {
                     <div className="space-y-5 pt-2">
                       <p className="text-sm text-[#474747] bg-[#FEF6E8] p-4 rounded-lg text-center font-medium">  
                         🎉 Ambiente de Demonstração! <br /> Pagamentos via
-                        Cartão de Crédito são aprovados automaticamente. Não é
-                        necessário preencher dados reais do cartão.
+                        Cartão de Crédito são aprovados automaticamente.
                       </p>
                     </div>
                   )}
@@ -560,8 +462,7 @@ export default function CheckoutPage() {
                     <div className="space-y-5 pt-2">
                       <p className="text-sm text-light-gray-2 bg-light-gray-3 p-4 rounded-lg text-center font-medium">
                         🏦 Ambiente de Demonstração! <br /> O boleto será gerado
-                        automaticamente após a confirmação do pedido. Nenhum
-                        pagamento real será processado.
+                        automaticamente após a confirmação do pedido.
                       </p>
                     </div>
                   )}
@@ -570,40 +471,28 @@ export default function CheckoutPage() {
             </div>
           </form>
 
-          {/* Mobile Summary Block (Visually matches the 'Resumo' card in image) */}
           <div className="lg:hidden w-full bg-white rounded-lg p-0 mb-8">
             <Section title="RESUMO">
               <SummaryContent />
             </Section>
           </div>
 
-
-          {/* Espaço para a barra fixa não sobrepor conteúdo */}
           <div className="h-36 lg:hidden" />
         </div>
 
-        {/* Right Column - Order Summary (Desktop only) */}
         <div className="hidden lg:block lg:w-[340px] shrink-0">
           <div className="bg-white rounded-lg shadow-sm p-6 lg:sticky lg:top-6">
-            <h2 className="text-lg font-bold text-dark-gray-2 mb-6 uppercase">
-              RESUMO
-            </h2>
+            <h2 className="text-lg font-bold text-dark-gray-2 mb-6 uppercase">RESUMO</h2>
             <SummaryContent />
           </div>
         </div>
       </div>
 
-      {/* ── Barra fixa inferior Mobile — CTA persistente ── */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white px-5 py-4 shadow-[0_-4px_12px_rgba(0,0,0,0.08)] z-30">
         <div className="flex items-center justify-between mb-3">
           <span className="text-base font-bold text-dark-gray-2">Total</span>
           <div className="text-right">
-            <span className="text-xl font-bold text-primary">
-              {formatPrice(total)}
-            </span>
-            <p className="text-xs text-light-gray">
-              ou 10x de R$ {installmentValue} sem juros
-            </p>
+            <span className="text-xl font-bold text-primary">{formatPrice(total)}</span>
           </div>
         </div>
         <Button

@@ -157,7 +157,10 @@ export function Gallery({
         className="w-full"
         opts={{
           loop: true,
-          align: 'start'
+          align: 'start',
+          breakpoints: {
+            '(min-width: 1024px)': { watchDrag: false }
+          }
         }}
       >
         <CarouselContent>
