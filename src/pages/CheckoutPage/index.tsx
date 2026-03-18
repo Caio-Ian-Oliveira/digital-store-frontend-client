@@ -142,6 +142,9 @@ export default function CheckoutPage() {
       // POST para criar o Pedido
       const response = await api.post('/orders', payload)
 
+      // Aguarda 1.5s para simular processamento e dar feedback visual ao usuário
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+
       // Limpa os dados do contexto localmente (o backend limpou no banco já)
       await cart.fetchCart()
 

@@ -74,10 +74,23 @@ export default function OrderSuccessPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#F9F8FE] py-12 px-4 flex items-center justify-center">
-        <p className="text-dark-gray-2 text-lg animate-pulse font-bold">
-          Buscando detalhes do pedido...
-        </p>
+      <div className="min-h-screen bg-[#F9F8FE] py-8 lg:py-16 px-4">
+        <div className="max-w-2xl mx-auto">
+          <div className="bg-white rounded-[4px] px-6 py-8 lg:p-10 flex flex-col items-center min-h-[700px] justify-center transition-all duration-300">
+            <div className="animate-pulse flex flex-col items-center w-full">
+              <div className="w-16 h-16 bg-light-gray-3 rounded-full mb-6" />
+              <div className="h-10 bg-light-gray-3 rounded w-3/4 mb-10" />
+              <div className="space-y-4 w-full px-4">
+                <div className="h-4 bg-light-gray-3 rounded w-1/2" />
+                <div className="h-4 bg-light-gray-3 rounded w-full" />
+                <div className="h-4 bg-light-gray-3 rounded w-2/3" />
+              </div>
+              <p className="text-dark-gray-2 text-lg font-bold mt-10">
+                Processando seu pedido...
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
@@ -114,7 +127,7 @@ export default function OrderSuccessPage() {
     <div className="min-h-screen bg-[#F9F8FE] py-8 lg:py-16 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Receipt Card */}
-        <div className="bg-white rounded-[4px] px-6 py-8 lg:p-10 flex flex-col items-center">
+        <div className="bg-white rounded-[4px] px-6 py-8 lg:p-10 flex flex-col items-center min-h-[700px] animate-in fade-in duration-500">
           {/* Header */}
           <div className="mb-4">
             <span className="text-4xl text-[#F6AA1C]">🎉</span>
