@@ -3,8 +3,8 @@ import axios from 'axios'
 import { Loader2 } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import RouterLink from '@/components/RouterLink'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuth } from '@/features/auth'
+import { RouterLink } from '@/shared/components'
 import LoginLoadingScreen from '../../components/LoginLoadingScreen'
 import { useLoginMutation } from '../../queries/useLoginMutation'
 import { type LoginFormData, loginSchema } from '../../utils/loginSchema'
@@ -50,7 +50,7 @@ const LoginPage = () => {
   }
 
   return (
-    <section className="flex-1 relative overflow-hidden">
+    <main className="flex-1 relative overflow-hidden">
       {/* Fundo gradiente — idêntico ao RegisterPage */}
       <div
         className="absolute inset-0"
@@ -58,6 +58,7 @@ const LoginPage = () => {
           background:
             'linear-gradient(90deg, #E6E4FF 0%, #C9C6F5 50%, #B8B4EE 100%)'
         }}
+        aria-hidden="true"
       />
 
       {/* Conteúdo centralizado */}
@@ -65,9 +66,15 @@ const LoginPage = () => {
         {/* Grid de duas colunas — idêntico ao RegisterPage */}
         <div className="w-full grid grid-cols-1 lg:grid-cols-[40%_60%] items-center gap-8">
           {/* Coluna esquerda — Card de Login */}
-          <div className="bg-white rounded-lg p-8 w-full max-w-115 mx-auto lg:mx-0 shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
+          <section
+            className="bg-white rounded-lg p-8 w-full max-w-115 mx-auto lg:mx-0 shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
+            aria-labelledby="login-title"
+          >
             {/* Título */}
-            <h1 className="text-2xl font-bold text-dark-gray mb-2">
+            <h1
+              id="login-title"
+              className="text-2xl font-bold text-dark-gray mb-2"
+            >
               Acesse sua conta
             </h1>
 
@@ -89,7 +96,10 @@ const LoginPage = () => {
               className="flex flex-col gap-5"
             >
               {generalError && (
-                <div className="p-3 rounded-md bg-red-50 border border-[#C92071]/20 text-[#C92071] text-sm">
+                <div
+                  className="p-3 rounded-md bg-red-50 border border-[#C92071]/20 text-[#C92071] text-sm"
+                  role="alert"
+                >
                   {generalError}
                 </div>
               )}
@@ -100,13 +110,18 @@ const LoginPage = () => {
                   htmlFor="login-field"
                   className="text-[13px] font-medium text-dark-gray"
                 >
-                  Login <span className="text-primary">*</span>
+                  Login{' '}
+                  <span className="text-primary" aria-hidden="true">
+                    *
+                  </span>
+                  <span className="sr-only">(obrigatório)</span>
                 </label>
                 <input
                   id="login-field"
                   type="email"
                   placeholder="Insira seu login ou email"
                   disabled={loading}
+                  aria-required="true"
                   {...register('email')}
                   className={`h-11 rounded-md bg-light-gray-3 border-none px-3 text-sm text-dark-gray placeholder:text-light-gray outline-none focus:ring-2 focus:ring-primary/30 transition-all ${errors.email ? 'ring-2 ring-[#C92071]/50 bg-[#C92071]/5' : ''}`}
                 />
@@ -123,13 +138,18 @@ const LoginPage = () => {
                   htmlFor="senha-field"
                   className="text-[13px] font-medium text-dark-gray"
                 >
-                  Senha <span className="text-primary">*</span>
+                  Senha{' '}
+                  <span className="text-primary" aria-hidden="true">
+                    *
+                  </span>
+                  <span className="sr-only">(obrigatório)</span>
                 </label>
                 <input
                   id="senha-field"
                   type="password"
                   placeholder="Insira sua senha"
                   disabled={loading}
+                  aria-required="true"
                   {...register('password')}
                   className={`h-11 rounded-md bg-light-gray-3 border-none px-3 text-sm text-dark-gray placeholder:text-light-gray outline-none focus:ring-2 focus:ring-primary/30 transition-all ${errors.password ? 'ring-2 ring-[#C92071]/50 bg-[#C92071]/5' : ''}`}
                 />
@@ -155,7 +175,10 @@ const LoginPage = () => {
                 className="h-11 w-full bg-primary text-white font-semibold flex justify-center items-center rounded-md hover:brightness-90 transition-all cursor-pointer disabled:opacity-50"
               >
                 {loading ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <Loader2
+                    className="w-5 h-5 animate-spin"
+                    aria-label="Carregando"
+                  />
                 ) : (
                   'Acessar Conta'
                 )}
@@ -170,7 +193,10 @@ const LoginPage = () => {
               </span>
 
               {/* Ícones de login social */}
-              <div className="flex items-center gap-4">
+              <nav
+                className="flex items-center gap-4"
+                aria-label="Login alternativo"
+              >
                 {/* Ícone Google */}
                 <a
                   href="#google"
@@ -221,28 +247,36 @@ const LoginPage = () => {
                     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                   </svg>
                 </a>
-              </div>
+              </nav>
             </div>
-          </div>
+          </section>
 
           {/* Coluna direita — Imagens de tênis (idêntico ao RegisterPage) */}
-          <div className="hidden lg:flex items-center justify-center relative h-100">
-            {/* Tênis 1 — maior, em destaque na frente */}
-            <img
-              src="/tenis-1-tela-de-cadastro.webp"
-              alt="Tênis em destaque"
-              className="absolute w-80 right-4 bottom-4 drop-shadow-lg z-10 -rotate-15"
-            />
-            {/* Tênis 2 — menor, atrás */}
-            <img
-              src="/tenis-2-tela-de-cadastro.webp"
-              alt="Tênis em destaque"
-              className="absolute w-64 right-72 top-16 drop-shadow-md z-0 rotate-10"
-            />
-          </div>
+          <aside
+            className="hidden lg:flex items-center justify-center relative h-100"
+            aria-hidden="true"
+          >
+            <figure>
+              {/* Tênis 1 — maior, em destaque na frente */}
+              <img
+                src="/tenis-1-tela-de-cadastro.webp"
+                alt=""
+                className="absolute w-80 right-4 bottom-4 drop-shadow-lg z-10 -rotate-15"
+              />
+              {/* Tênis 2 — menor, atrás */}
+              <img
+                src="/tenis-2-tela-de-cadastro.webp"
+                alt=""
+                className="absolute w-64 right-72 top-16 drop-shadow-md z-0 rotate-10"
+              />
+              <figcaption className="sr-only">
+                Ilustração de tênis colecionáveis
+              </figcaption>
+            </figure>
+          </aside>
         </div>
       </div>
-    </section>
+    </main>
   )
 }
 

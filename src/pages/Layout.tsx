@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
-import Footer from '@/components/Footer'
-import Header from '@/components/Header'
-import { Toaster } from '@/components/ui/sonner'
+import { Footer } from '@/shared/components/Footer'
+import { Header } from '@/shared/components/Header'
+import { Toaster } from '@/shared/components/ui/sonner'
 
 interface LayoutProps {
   children: ReactNode

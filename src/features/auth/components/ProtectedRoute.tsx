@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from 'react-router-dom'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuth } from '../contexts/AuthContext'
 
 /**
  * Componente de proteção de rotas.
@@ -8,7 +8,11 @@ import { useAuth } from '@/contexts/AuthContext'
  * Caso contrário, redireciona para a página de Login.
  */
 export const ProtectedRoute = () => {
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, isInitialLoading } = useAuth()
+
+  if (isInitialLoading) {
+    return null
+  }
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />

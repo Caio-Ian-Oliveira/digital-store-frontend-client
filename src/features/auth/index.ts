@@ -1,0 +1,13 @@
+export * from './api/userService'
+export * from './components/LoginLoadingScreen'
+export * from './components/ProtectedRoute'
+export * from './contexts/AuthContext'
+// Pages (default exports precisam ser re-exportados assim)
+export { default as LoginPage } from './pages/LoginPage'
+export { default as RegisterFormPage } from './pages/RegisterFormPage'
+export { default as RegisterPage } from './pages/RegisterPage'
+export * from './queries/useLoginMutation'
+export * from './queries/useLogoutMutation'
+export * from './queries/useRegisterMutation'
+export * from './utils/loginSchema'
+export * from './utils/registerSchema'
