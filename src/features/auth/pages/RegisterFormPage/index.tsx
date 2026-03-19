@@ -2,9 +2,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import { CheckCircle2, Loader2 } from 'lucide-react'
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { useLocation } from 'react-router-dom'
-import RouterLink from '@/components/RouterLink'
+import { CEPInput, CPFInput, PhoneInput } from '@/shared/components'
+import { RouterLink } from '@/shared/components/RouterLink'
+import { removeNonNumbers } from '@/shared/utils'
 import type { RegisterUserPayload } from '../../api/userService'
 import { useRegisterMutation } from '../../queries/useRegisterMutation'
 import {
@@ -21,6 +23,7 @@ const RegisterFormPage = () => {
 
   const {
     register,
+    control,
     handleSubmit,
     setError,
     formState: { errors }
@@ -57,8 +60,8 @@ const RegisterFormPage = () => {
       const payload: RegisterUserPayload = {
         firstname: data.primeiroNome,
         surname: data.sobrenome,
-        cpf: data.cpf,
-        phone: data.celular,
+        cpf: data.cpf ? removeNonNumbers(data.cpf) : '',
+        phone: data.celular ? removeNonNumbers(data.celular) : '',
         email: data.email,
         password: data.senha,
         confirmPassword: data.confirmacaoSenha
@@ -71,7 +74,10 @@ const RegisterFormPage = () => {
         if (data.bairro) payload.bairro = data.bairro
         if (data.cidade) payload.cidade = data.cidade
         if (data.estado) payload.estado = data.estado
-        if (data.cep) payload.cep = data.cep
+        if (data.cep) {
+          const cleanedCep = removeNonNumbers(data.cep)
+          if (cleanedCep) payload.cep = cleanedCep
+        }
         if (data.complemento) payload.complemento = data.complemento
       }
 
@@ -224,13 +230,21 @@ const RegisterFormPage = () => {
                     >
                       CPF <span className="text-primary">*</span>
                     </label>
-                    <input
-                      id="cpf"
-                      type="text"
-                      placeholder="Insira seu CPF"
-                      disabled={loading}
-                      className={getInputStyle('cpf')}
-                      {...register('cpf')}
+                    <Controller
+                      name="cpf"
+                      control={control}
+                      render={({ field }) => (
+                        <CPFInput
+                          id="cpf"
+                          placeholder="Insira seu CPF"
+                          disabled={loading}
+                          className={getInputStyle('cpf')}
+                          value={field.value}
+                          onChange={(cleanValue) => field.onChange(cleanValue)}
+                          onBlur={field.onBlur}
+                          showValidation={false} // Deixamos a validação para o schema
+                        />
+                      )}
                     />
                     {errors.cpf && (
                       <span className="text-xs text-[#C92071]">
@@ -268,13 +282,21 @@ const RegisterFormPage = () => {
                     >
                       Celular <span className="text-primary">*</span>
                     </label>
-                    <input
-                      id="celular"
-                      type="tel"
-                      placeholder="Insira seu celular"
-                      disabled={loading}
-                      className={getInputStyle('celular')}
-                      {...register('celular')}
+                    <Controller
+                      name="celular"
+                      control={control}
+                      render={({ field }) => (
+                        <PhoneInput
+                          id="celular"
+                          placeholder="Insira seu celular"
+                          disabled={loading}
+                          className={getInputStyle('celular')}
+                          value={field.value}
+                          onChange={(cleanValue) => field.onChange(cleanValue)}
+                          onBlur={field.onBlur}
+                          showValidation={false} // Deixamos a validação para o schema
+                        />
+                      )}
                     />
                     {errors.celular && (
                       <span className="text-xs text-[#C92071]">
@@ -431,13 +453,21 @@ const RegisterFormPage = () => {
                     >
                       CEP
                     </label>
-                    <input
-                      id="cep"
-                      type="text"
-                      placeholder="Insira seu CEP"
-                      disabled={loading}
-                      className={getInputStyle('cep')}
-                      {...register('cep')}
+                    <Controller
+                      name="cep"
+                      control={control}
+                      render={({ field }) => (
+                        <CEPInput
+                          id="cep"
+                          placeholder="Insira seu CEP"
+                          disabled={loading}
+                          className={getInputStyle('cep')}
+                          value={field.value}
+                          onChange={(cleanValue) => field.onChange(cleanValue)}
+                          onBlur={field.onBlur}
+                          showValidation={false} // Deixamos a validação para o schema
+                        />
+                      )}
                     />
                     {errors.cep && (
                       <span className="text-xs text-[#C92071]">

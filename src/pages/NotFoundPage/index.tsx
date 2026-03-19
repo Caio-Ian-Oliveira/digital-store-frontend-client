@@ -1,4 +1,4 @@
-import RouterLink from '../../components/RouterLink'
+import { RouterLink } from '@/shared/components/RouterLink'
 
 export function NotFoundPage() {
   return (

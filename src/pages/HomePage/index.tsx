@@ -1,13 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
-import { Gallery } from '@/components/Gallery'
-import { HeroSlide } from '@/components/HeroSlide'
-import ProductCard from '@/components/ProductCard'
-import { ProductCardSkeleton } from '@/components/ProductCardSkeleton'
-import RouterLink from '@/components/RouterLink'
-import Section from '@/components/Section'
-import { Skeleton } from '@/components/ui/skeleton'
-import { categoriesData } from '@/data/categories'
-import { getProducts } from '@/services/productService'
+import { categoriesData, getProducts, ProductCard } from '@/features/products'
+import {
+  Gallery,
+  HeroSlide,
+  ProductCardSkeleton,
+  RouterLink,
+  Section,
+  Skeleton
+} from '@/shared/components'
 
 // Dados do Hero Banner (Seção 5.1)
 const heroSlides = [
@@ -78,40 +78,46 @@ export default function HomePage() {
   })
 
   return (
-    <div className="space-y-8 lg:space-y-16">
+    <main className="space-y-8 lg:space-y-16">
       {/* Hero Banner Skeleton (while loading) or Gallery */}
       {isLoading ? (
-        <div className="w-full h-[500px] md:h-[600px] lg:h-[700px]">
-          <Skeleton className="w-full h-full rounded-none" />
-        </div>
-      ) : (
-        <Gallery
-          slides={heroSlides.map((slide) => ({
-            src: slide.src,
-            alt: slide.alt
-          }))}
-          width="100%"
-          height="auto"
-          radius="0px"
-          autoplay={true}
-          autoplayDelay={4000}
-          showDots={true}
-          dotsPosition="relative"
-          dotsClassName="pb-6"
-          className="w-full bg-light-gray-3"
+        <section
+          className="w-full h-125 md:h-150 lg:h-175"
+          aria-busy="true"
+          aria-label="Carregando banner em destaque"
         >
-          {(_slide, index) => (
-            <HeroSlide
-              badge={heroSlides[index].badge}
-              title={heroSlides[index].title}
-              description={heroSlides[index].description}
-              buttonText={heroSlides[index].buttonText}
-              buttonLink={heroSlides[index].buttonLink}
-              imageSrc={heroSlides[index].imageSrc}
-              imageAlt={heroSlides[index].alt}
-            />
-          )}
-        </Gallery>
+          <Skeleton className="w-full h-full rounded-none" />
+        </section>
+      ) : (
+        <section aria-label="Banner em destaque">
+          <Gallery
+            slides={heroSlides.map((slide) => ({
+              src: slide.src,
+              alt: slide.alt
+            }))}
+            width="100%"
+            height="auto"
+            radius="0px"
+            autoplay={true}
+            autoplayDelay={4000}
+            showDots={true}
+            dotsPosition="relative"
+            dotsClassName="pb-6"
+            className="w-full bg-light-gray-3"
+          >
+            {(_, index) => (
+              <HeroSlide
+                badge={heroSlides[index].badge}
+                title={heroSlides[index].title}
+                description={heroSlides[index].description}
+                buttonText={heroSlides[index].buttonText}
+                buttonLink={heroSlides[index].buttonLink}
+                imageSrc={heroSlides[index].imageSrc}
+                imageAlt={heroSlides[index].alt}
+              />
+            )}
+          </Gallery>
+        </section>
       )}
 
       <div className="max-w-7xl mx-auto px-4 lg:px-8 space-y-8 lg:space-y-16">
@@ -119,7 +125,7 @@ export default function HomePage() {
         <Section title="Coleções em destaque" titleAlign="left">
           <div className="grid grid-cols-1 min-[500px]:grid-cols-3 gap-4">
             {collections.map((collection) => (
-              <div
+              <article
                 key={`collection-${collection.src}`}
                 className="overflow-hidden rounded-lg hover:scale-105 transition-transform duration-300"
               >
@@ -128,33 +134,35 @@ export default function HomePage() {
                   alt={collection.alt}
                   className="w-full h-32 min-[500px]:h-24 sm:h-28 md:h-36 lg:h-auto object-cover"
                 />
-              </div>
+              </article>
             ))}
           </div>
         </Section>
 
         {/* Categorias em Destaque */}
         <Section title="Coleções em destaque" titleAlign="center">
-          <div className="flex justify-start min-[546px]:justify-center items-center gap-6 min-[546px]:gap-12 overflow-x-auto pb-4 -mx-4 px-4 min-[546px]:mx-0 min-[546px]:px-0 min-[546px]:overflow-visible min-[546px]:flex-wrap scrollbar-hide">
-            {categoriesData.map((category) => (
-              <RouterLink
-                key={category.slug}
-                to={`/products?category=${encodeURIComponent(category.name)}`}
-                className="flex flex-col items-center gap-3 group cursor-pointer"
-              >
-                <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-light-gray-3 flex items-center justify-center border-2 border-transparent group-hover:border-primary transition-all overflow-hidden duration-300">
-                  <img
-                    src={category.icon}
-                    alt={category.name}
-                    className="w-full h-full object-contain p-4 mix-blend-multiply group-hover:scale-110 transition-all duration-300"
-                  />
-                </div>
-                <span className="text-dark-gray-2 text-sm font-medium group-hover:text-primary transition-colors">
-                  {category.name}
-                </span>
-              </RouterLink>
-            ))}
-          </div>
+          <nav aria-label="Categorias de produtos">
+            <div className="flex justify-start min-[546px]:justify-center items-center gap-6 min-[546px]:gap-12 overflow-x-auto pb-4 -mx-4 px-4 min-[546px]:mx-0 min-[546px]:px-0 min-[546px]:overflow-visible min-[546px]:flex-wrap scrollbar-hide">
+              {categoriesData.map((category) => (
+                <RouterLink
+                  key={category.slug}
+                  to={`/products?category=${encodeURIComponent(category.name)}`}
+                  className="flex flex-col items-center gap-3 group cursor-pointer"
+                >
+                  <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-light-gray-3 flex items-center justify-center border-2 border-transparent group-hover:border-primary transition-all overflow-hidden duration-300">
+                    <img
+                      src={category.icon}
+                      alt={category.name}
+                      className="w-full h-full object-contain p-4 mix-blend-multiply group-hover:scale-110 transition-all duration-300"
+                    />
+                  </div>
+                  <span className="text-dark-gray-2 text-sm font-medium group-hover:text-primary transition-colors">
+                    {category.name}
+                  </span>
+                </RouterLink>
+              ))}
+            </div>
+          </nav>
         </Section>
 
         {/* Produtos em Alta (Seção 5.3) */}
@@ -163,7 +171,10 @@ export default function HomePage() {
           link={{ text: 'Ver Todos', href: '/products' }}
         >
           {error ? (
-            <div className="flex items-center justify-center py-20">
+            <div
+              className="flex items-center justify-center py-20"
+              role="alert"
+            >
               <p className="text-lg text-error">
                 {error instanceof Error
                   ? error.message
@@ -171,9 +182,12 @@ export default function HomePage() {
               </p>
             </div>
           ) : isLoading ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6 lg:gap-x-8 lg:gap-y-6">
-              {['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'h7', 'h8'].map((id) => (
-                <div key={id} className="h-full w-full">
+            <div
+              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6 lg:gap-x-8 lg:gap-y-6"
+              aria-busy="true"
+            >
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((skeletonId) => (
+                <div key={skeletonId} className="h-full w-full">
                   <ProductCardSkeleton />
                 </div>
               ))}
@@ -196,7 +210,7 @@ export default function HomePage() {
         </Section>
 
         {/* Seção Oferta Especial - Air Jordan */}
-        <section className="py-16">
+        <section className="py-16" aria-labelledby="special-offer-title">
           <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
             {/* Imagem do Tênis com Eclipse de fundo */}
             <div className="flex-1 flex justify-center relative">
@@ -208,7 +222,7 @@ export default function HomePage() {
                 <img
                   src="/ellipse.webp"
                   alt=""
-                  className="w-full h-auto max-w-[466px] object-contain"
+                  className="w-full h-auto max-w-116.5 object-contain"
                 />
               </div>
 
@@ -225,7 +239,10 @@ export default function HomePage() {
               <span className="text-primary font-semibold text-sm uppercase tracking-wide">
                 Oferta especial
               </span>
-              <h2 className="text-3xl lg:text-4xl font-bold leading-tight text-dark-gray">
+              <h2
+                id="special-offer-title"
+                className="text-3xl lg:text-4xl font-bold leading-tight text-dark-gray"
+              >
                 Air Jordan edição de colecionador
               </h2>
               <p className="text-dark-gray-2 text-base leading-relaxed text-justify">
@@ -244,6 +261,6 @@ export default function HomePage() {
           </div>
         </section>
       </div>
-    </div>
+    </main>
   )
 }

@@ -36,6 +36,16 @@
   --color-light-gray-2: #cccccc;
   --color-light-gray-3: #f5f5f5;
   --color-white: #ffffff;
+
+  /* Custom Spacing Sizes */
+  --size-12\.5: 3.125rem;
+  --size-30: 7.5rem;
+  --size-100: 25rem;
+  --size-106\.25: 26.5625rem;
+  --size-116\.5: 29.125rem;
+  --size-125: 31.25rem;
+  --size-150: 37.5rem;
+  --size-175: 43.75rem;
 }
 
 @theme inline {

@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { isValidCEP, isValidCPF, isValidPhone } from '@/shared/utils'
 
 export const registerSchema = z
   .object({
@@ -12,13 +13,17 @@ export const registerSchema = z
       .max(50, 'Máximo de 50 caracteres'),
     cpf: z
       .string()
-      .min(11, 'CPF deve ter no mínimo 11 caracteres')
-      .max(14, 'CPF deve ter no máximo 14 caracteres'),
+      .min(11, 'CPF deve ter 11 dígitos')
+      .refine((cpf) => isValidCPF(cpf), {
+        message: 'CPF inválido'
+      }),
     email: z.string().email('Email inválido'),
     celular: z
       .string()
-      .min(10, 'O celular deve ter no mínimo 10 caracteres')
-      .max(15, 'O celular deve ter no máximo 15 caracteres'),
+      .min(10, 'O celular deve ter no mínimo 10 dígitos')
+      .refine((phone) => isValidPhone(phone), {
+        message: 'Número de telefone inválido'
+      }),
     senha: z
       .string()
       .min(6, 'A senha deve ter no mínimo 6 caracteres')
@@ -44,7 +49,19 @@ export const registerSchema = z
       .max(2, 'A sigla do estado deve ter 2 caracteres')
       .optional()
       .or(z.literal('')),
-    cep: z.string().max(9, 'CEP muito longo').optional().or(z.literal('')),
+    cep: z
+      .string()
+      .optional()
+      .or(z.literal(''))
+      .refine(
+        (cep) => {
+          if (!cep || cep === '') return true
+          return isValidCEP(cep)
+        },
+        {
+          message: 'CEP inválido'
+        }
+      ),
     complemento: z
       .string()
       .max(200, 'Complemento muito longo')
