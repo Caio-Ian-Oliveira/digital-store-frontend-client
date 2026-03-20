@@ -1,6 +1,12 @@
+/**
+ * Barrel file do módulo de Usuário.
+ * Exporta o layout de perfil e as páginas da área do usuário.
+ */
+
+// Componentes
 export * from './components/ProfileLayout'
 
-// Pages
+// Páginas
 export { default as MyInfoPage } from './pages/MyInfoPage'
 export { default as MyPaymentMethodsPage } from './pages/MyPaymentMethodsPage'
 export { default as MyProfilePage } from './pages/MyProfilePage'

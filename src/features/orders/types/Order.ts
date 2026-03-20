@@ -1,3 +1,4 @@
+/** Representa um item individual dentro de um pedido. */
 export interface OrderItem {
   id?: string
   product_id: string | number
@@ -7,6 +8,7 @@ export interface OrderItem {
   price_at_purchase: number
 }
 
+/** Dados pessoais do comprador associados ao pedido. */
 export interface PersonalInfo {
   full_name: string
   cpf: string
@@ -14,6 +16,7 @@ export interface PersonalInfo {
   phone: string
 }
 
+/** Endereço de entrega associado ao pedido. */
 export interface DeliveryAddress {
   address: string
   neighborhood: string
@@ -22,11 +25,13 @@ export interface DeliveryAddress {
   complement?: string
 }
 
+/** Informações de pagamento do pedido. */
 export interface PaymentInfo {
   method: string
   installments?: number
 }
 
+/** Resumo financeiro do pedido (subtotal, frete, desconto, total). */
 export interface OrderSummary {
   subtotal: number
   shipping: number
@@ -34,6 +39,7 @@ export interface OrderSummary {
   total: number
 }
 
+/** Entidade principal de Pedido, retornada pela API. */
 export interface Order {
   id: string
   status: string

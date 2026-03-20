@@ -1,6 +1,10 @@
 import { z } from 'zod'
 import { isValidCEP, isValidCPF, isValidPhone } from '@/shared/utils'
 
+/**
+ * Schema de validação do formulário de checkout.
+ * Valida dados pessoais, endereço de entrega e método de pagamento.
+ */
 export const checkoutSchema = z.object({
   fullName: z
     .string()

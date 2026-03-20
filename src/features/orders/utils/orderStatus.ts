@@ -1,3 +1,7 @@
+/**
+ * Mapa de status dos pedidos.
+ * Cada status possui um label em português e uma classe CSS para estilização.
+ */
 export const statusMap: Record<string, { label: string; className: string }> = {
   pending: {
     label: 'Aguardando Pagamento',
@@ -23,6 +27,10 @@ export const statusMap: Record<string, { label: string; className: string }> = {
   }
 }
 
+/**
+ * Retorna as informações de exibição (label + classe CSS) de um status de pedido.
+ * Caso o status não seja reconhecido, retorna "Pago" como padrão.
+ */
 export function getStatusInfo(status: string) {
   return (
     statusMap[status] ?? {
