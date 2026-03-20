@@ -14,6 +14,11 @@ import {
   registerSchema
 } from '../../utils/registerSchema'
 
+/**
+ * Página de Formulário Completo de Cadastro.
+ * Contém campos de dados pessoais, endereço e senha com validação Zod.
+ * Ao submeter, envia os dados para a API e exibe feedback de sucesso/erro.
+ */
 const RegisterFormPage = () => {
   const location = useLocation()
   const initialEmail = location.state?.email || ''
@@ -85,7 +90,7 @@ const RegisterFormPage = () => {
       await new Promise((resolve) => setTimeout(resolve, 2500))
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.data?.errors) {
-        // Mapeia erros de volta pros campos base
+        // Mapeia os erros retornados pela API de volta para os campos do formulário
         const formToApiMap: Record<string, keyof RegisterFormData> = {
           firstname: 'primeiroNome',
           surname: 'sobrenome',

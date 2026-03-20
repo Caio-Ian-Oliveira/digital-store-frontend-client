@@ -9,6 +9,11 @@ import LoginLoadingScreen from '../../components/LoginLoadingScreen'
 import { useLoginMutation } from '../../queries/useLoginMutation'
 import { type LoginFormData, loginSchema } from '../../utils/loginSchema'
 
+/**
+ * Página de Login da Digital Store.
+ * Possui formulário validado com Zod, integração com a API de autenticação
+ * via React Query, e tela de carregamento animada após login bem-sucedido.
+ */
 const LoginPage = () => {
   const { setUser } = useAuth()
   const [generalError, setGeneralError] = useState<string | null>(null)
@@ -29,7 +34,7 @@ const LoginPage = () => {
     setGeneralError(null)
     try {
       const response = await login(data)
-      // Save user to context and localStorage
+      // Salva o usuário no contexto global e no localStorage
       if (response?.user) {
         setUser(response.user)
       }

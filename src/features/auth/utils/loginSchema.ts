@@ -1,5 +1,9 @@
 import { z } from 'zod'
 
+/**
+ * Schema de validação do formulário de login.
+ * Valida e-mail e senha com mensagens em português.
+ */
 export const loginSchema = z.object({
   email: z
     .string()

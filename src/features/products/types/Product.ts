@@ -1,9 +1,11 @@
+/** Representa uma imagem de produto vinda da API. */
 export interface ProductImage {
   id: number
   path: string
   enabled: boolean
 }
 
+/** Representa uma opção de personalização do produto (ex: cor, tamanho). */
 export interface ProductOption {
   id: number
   title: string
@@ -13,12 +15,14 @@ export interface ProductOption {
   values: string[]
 }
 
+/** Representa uma categoria associada ao produto. */
 export interface ProductCategory {
   id: string
   name: string
   slug: string
 }
 
+/** Entidade principal de Produto utilizada no Front-end. */
 export interface Product {
   id: string
   name: string

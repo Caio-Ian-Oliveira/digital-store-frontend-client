@@ -115,7 +115,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       // Update Otimista: Adiciona ao estado local antes da resposta da API
       // para que o usuário veja a mudança imediatamente.
       setItems((prev) => {
-        // Find if this exact combination already exists locally
+        // Verifica se esta combinação exata já existe no estado local
         const existingInfo = prev.find(
           (item) =>
             item.product.id === product.id
@@ -129,7 +129,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
               : item
           )
         }
-        // Use a temporary fake ID until fetch returns
+        // Usa um ID temporário até que o fetchCart retorne os IDs reais da API
         return [
           ...prev,
           {
@@ -149,11 +149,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
           selected_color: selectedColor,
           selected_size: selectedSize
         })
-        // Sincroniza o estado real do banco (recupera os UUIDs gerados pela API)
+        // Sincroniza o estado com o banco de dados (recupera os IDs reais gerados pela API)
         await fetchCart()
       } catch (error) {
         console.error('Erro ao adicionar produto:', error)
-        // Se errar, tenta recuperar do banco para limpar o state otimista
+        // Em caso de erro, re-sincroniza com o banco para reverter o update otimista
         await fetchCart()
       }
     },
@@ -164,16 +164,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
     async (itemId: string) => {
       if (!isAuthenticated) return
 
-      // Optimistic delete
+      // Remoção otimista do estado local
       setItems((prev) => prev.filter((item) => item.id !== itemId))
 
       try {
         await api.delete(`/cart/remove/${itemId}`)
-        // fetchCart() is not strictly needed after a successful delete if optimism is flawless,
-        // but it's safer to ensure state consistency with database.
+        // fetchCart() não é estritamente necessário após um delete bem-sucedido,
+        // mas garante consistência do estado local com o banco de dados.
       } catch (error) {
         console.error('Erro ao remover item:', error)
-        await fetchCart() // revert local changes if API fails
+        await fetchCart() // Reverte alterações locais se a API falhar
       }
     },
     [isAuthenticated, fetchCart]
@@ -183,7 +183,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     async (itemId: string, quantity: number) => {
       if (!isAuthenticated || quantity < 1) return
 
-      // Optimistic update
+      // Atualização otimista da quantidade no estado local
       setItems((prev) =>
         prev.map((item) => (item.id === itemId ? { ...item, quantity } : item))
       )

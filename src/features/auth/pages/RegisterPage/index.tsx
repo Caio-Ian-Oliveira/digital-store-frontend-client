@@ -2,19 +2,24 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RouterLink } from '@/shared/components/RouterLink'
 
+/**
+ * Página inicial de Cadastro.
+ * Tela com campo de email e redirecionamento para o formulário completo.
+ * Layout de duas colunas com imagens decorativas de tênis.
+ */
 const RegisterPage = () => {
   const [email, setEmail] = useState('')
   const navigate = useNavigate()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Navigate programmatically passing the email via router state
+    // Navega para o formulário completo passando o email via state do router
     navigate('/register-form-page', { state: { email } })
   }
 
   return (
     <section className="flex-1 relative overflow-hidden">
-      {/* Background gradient */}
+      {/* Fundo gradiente */}
       <div
         className="absolute inset-0"
         style={{
@@ -23,18 +28,18 @@ const RegisterPage = () => {
         }}
       />
 
-      {/* Content */}
+      {/* Conteúdo centralizado */}
       <div className="relative z-10 max-w-360 mx-auto px-4 lg:px-25 flex items-center min-h-0 lg:min-h-135 py-12 lg:py-20">
-        {/* Grid: 2 columns */}
+        {/* Grid de duas colunas */}
         <div className="w-full grid grid-cols-1 lg:grid-cols-[40%_60%] items-center gap-8">
-          {/* Left Column - Form Card */}
+          {/* Coluna esquerda — Card de cadastro */}
           <div className="bg-white rounded-lg p-8 w-full max-w-115 mx-auto lg:mx-0 shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
-            {/* Title */}
+            {/* Título */}
             <h1 className="text-2xl font-bold text-dark-gray mb-2">
               Crie sua conta
             </h1>
 
-            {/* Subtitle */}
+            {/* Subtítulo com link para login */}
             <p className="text-sm text-dark-gray-3 mb-6">
               Já possui uma conta?{' '}
               <RouterLink
@@ -45,9 +50,9 @@ const RegisterPage = () => {
               </RouterLink>
             </p>
 
-            {/* Form */}
+            {/* Formulário */}
             <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-              {/* Email field */}
+              {/* Campo de e-mail */}
               <div className="flex flex-col gap-1.5">
                 <label
                   htmlFor="register-email"
@@ -66,7 +71,7 @@ const RegisterPage = () => {
                 />
               </div>
 
-              {/* Submit button */}
+              {/* Botão de envio */}
               <button
                 type="submit"
                 className="h-11 w-full flex items-center justify-center bg-primary text-white font-semibold rounded-md hover:brightness-90 transition-all cursor-pointer"
@@ -75,13 +80,13 @@ const RegisterPage = () => {
               </button>
             </form>
 
-            {/* Social login */}
+            {/* Login social */}
             <div className="mt-5 flex flex-col items-center gap-3">
               <span className="text-[13px] text-dark-gray-3">
                 Ou faça login com
               </span>
               <div className="flex items-center gap-4">
-                {/* Google icon */}
+                {/* Ícone Google */}
                 <a
                   href="#google"
                   className="w-8 h-8 flex items-center justify-center cursor-pointer hover:opacity-70 transition-opacity"
@@ -114,7 +119,7 @@ const RegisterPage = () => {
                   </svg>
                 </a>
 
-                {/* Facebook icon */}
+                {/* Ícone Facebook */}
                 <a
                   href="#facebook"
                   className="w-8 h-8 flex items-center justify-center cursor-pointer hover:opacity-70 transition-opacity"
@@ -135,15 +140,15 @@ const RegisterPage = () => {
             </div>
           </div>
 
-          {/* Right Column - Visual Area (shoes) */}
+          {/* Coluna direita — Área visual (tênis decorativos) */}
           <div className="hidden lg:flex items-center justify-center relative h-100">
-            {/* Shoe 1 - larger, front */}
+            {/* Tênis 1 — maior, em destaque na frente */}
             <img
               src="/tenis-1-tela-de-cadastro.webp"
               alt="Tênis em destaque"
               className="absolute w-80 right-4 bottom-4 drop-shadow-lg z-10 -rotate-15"
             />
-            {/* Shoe 2 - smaller, behind */}
+            {/* Tênis 2 — menor, atrás */}
             <img
               src="/tenis-2-tela-de-cadastro.webp"
               alt="Tênis em destaque"
