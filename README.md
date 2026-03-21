@@ -16,7 +16,7 @@
 
 > [!IMPORTANT]
 > **Projeto Final — Geração Tech 3.0**
-> Este repositório contém o **Front-end** da plataforma **Digital Store**, desenvolvido como **Trabalho Final do Curso** do programa **Geração Tech 3.0**. Trata-se de um E-commerce para calçados e artigos esportivos.
+> Este repositório contém o **Front-end** da plataforma **Digital Store**, desenvolvido como **Trabalho Final do Curso** do **Geração Tech 3.0**. Trata-se de um E-commerce para vestuário e acessórios.
 
 ---
 
@@ -27,8 +27,8 @@ O projeto **Digital Store** é composto por **3 repositórios independentes** qu
 | Repositório | Descrição | Responsável por |
 |---|---|---|
 | **🖥️ digital-store-frontend** (este repo) | Interface do consumidor final | Navegação de produtos, carrinho, checkout, gestão de pedidos e perfil do usuário |
-| **🔧 digital-store-api** | API RESTful | Autenticação, CRUD de produtos, gestão de pedidos, controle de estoque, processamento de pagamentos e lógica de negócio |
-| **📊 digital-store-admin** | Painel administrativo | Cadastro/edição de produtos, gestão de categorias/marcas, visualização de pedidos e métricas do negócio |
+| **🔧 digital-store-api** [https://github.com/CaioIan/digital-store-api] | API RESTful | Autenticação, CRUD de produtos, gestão de pedidos, controle de estoque, processamento de pagamentos e lógica de negócio |
+| **📊 digital-store-admin** [https://github.com/CaioIan/digital-store-admin] | Painel administrativo | Cadastro/edição de produtos, gestão de categorias/marcas, visualização de pedidos e métricas do negócio |
 
 ### Como os projetos se conectam
 
@@ -218,6 +218,12 @@ src/
 - **API do Digital Store** rodando em background (veja a seção do ecossistema acima)
 
 ### Passo a Passo
+
+> **IMPORTANTE PROJETO ADMIN:** Para que os produtos apareçam no projeto será necessário cadastrar produtos com o projeto admin em: [https://github.com/CaioIan/digital-store-admin](https://github.com/CaioIan/digital-store-admin) mas antes terá que rodar a API do Digital Store em background como citado abaixo.
+
+> **IMPORTANTE PROJETO API:** Para que o front-end e o painel admin funcionem corretamente, será necessário rodar a API do Digital Store em background. Para mais informações, acesse a documentação da API em [https://github.com/CaioIan/digital-store-api](https://github.com/CaioIan/digital-store-api).
+
+> **IMPORTANTE COMO CRIAR UMA CONTA ADMIN:** Por padrão, TODOS os usuários são criados com a role USER, para criar uma conta admin será necessário cadastrar um usuário normalmente e em seguida alterar sua role para ADMIN diretamente no banco de dados. Para mais informações, acesse a documentação da API em [https://github.com/CaioIan/digital-store-api](https://github.com/CaioIan/digital-store-api).
 
 1. **Clone o repositório:**
    ```bash
