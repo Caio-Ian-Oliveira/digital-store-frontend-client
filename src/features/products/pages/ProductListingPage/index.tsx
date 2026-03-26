@@ -29,7 +29,7 @@ export default function ProductListingPage() {
   const categoryParam = searchParams.get('category') || ''
   const [filterBrand, setFilterBrand] = useState<string[]>([])
   const [filterCategory, setFilterCategory] = useState<string[]>([])
-  const [filterGender, setFilterGender] = useState<string>('')
+  const [filterGender, setFilterGender] = useState<string[]>([])
   const [filterSheetOpen, setFilterSheetOpen] = useState(false)
   const [sortOrder, setSortOrder] = useState<'lowest' | 'highest'>('lowest')
   const [page, setPage] = useState(1)
@@ -37,7 +37,31 @@ export default function ProductListingPage() {
   // Reseta para a página 1 ao mudar qualquer filtro
   useEffect(() => {
     setPage(1)
-  }, [])
+  }, [filter, categoryParam, filterBrand, filterCategory, filterGender])
+
+  // Query para buscar opções de filtro (marcas e categorias) sem aplicar marca/categoria específica
+  // Isso garante que todas as opções apareçam mesmo quando filtrando
+  const {
+    data: filterOptionsResponse
+  } = useQuery({
+    queryKey: [
+      'products-filter-options',
+      filter,
+      categoryParam
+    ],
+    queryFn: async () => {
+      const options: any = {
+        page: 1,
+        limit: 100
+      }
+
+      if (filter) options.match = filter
+      else if (categoryParam) options.match = categoryParam
+
+      return getProducts(options)
+    },
+    placeholderData: keepPreviousData
+  })
 
   const {
     data: response,
@@ -69,11 +93,22 @@ export default function ProductListingPage() {
       // Aplica filtros se existirem
       if (filter) options.match = filter
       else if (categoryParam) options.match = categoryParam
-      if (filterGender) {
-        options.gender = filterGender === 'Unissex' ? 'Unisex' : filterGender
+      if (filterGender.length > 0) {
+        const genderValues = filterGender.map(g => g === 'Unissex' ? 'Unisex' : g)
+        options.gender = genderValues.join(',')
       }
       if (filterBrand.length > 0) {
         options.brand = filterBrand.join(',')
+      }
+
+      // Converter filterCategory (nomes) para category_ids (IDs)
+      if (filterCategory.length > 0) {
+        const categoryIds = filterCategory
+          .map((name) => categoryMap.get(name))
+          .filter(Boolean) as string[]
+        if (categoryIds.length > 0) {
+          options.category_ids = categoryIds
+        }
       }
 
       // Chamada real ao Service que comunica com o Backend
@@ -95,22 +130,26 @@ export default function ProductListingPage() {
   // Total count defined by the backend
   const productCount: number = response?.total ?? products.length
 
-  const brandOptions = [
-    { label: 'Nike', value: 'Nike' },
-    { label: 'Adidas', value: 'Adidas' },
-    { label: 'Puma', value: 'Puma' },
-    { label: 'Reebok', value: 'Reebok' },
-    { label: 'New Balance', value: 'New Balance' },
-    { label: 'Asics', value: 'Asics' },
-    { label: 'Mizuno', value: 'Mizuno' },
-    { label: 'Fila', value: 'Fila' },
-    { label: 'Vans', value: 'Vans' },
-    { label: 'Converse', value: 'Converse' }
-  ]
+  // Usar os produtos de filterOptionsResponse para derivar as opções de filtro
+  const filterOptionsProducts = filterOptionsResponse?.data || []
+
+  // Criar mapa de nome -> id para conversão de filtros de categoria
+  const categoryMap = new Map<string, string>()
+  filterOptionsProducts.forEach((p: Product) => {
+    if (p.categories && p.categories.length > 0) {
+      p.categories.forEach((cat: { id: string; name: string }) => {
+        categoryMap.set(cat.name, cat.id)
+      })
+    }
+  })
+
+  const brandOptions = Array.from(
+    new Set(filterOptionsProducts.map((p: Product) => p.brand).filter(Boolean))
+  ).map((b: unknown) => ({ label: String(b), value: String(b) }))
 
   const categoryOptions = Array.from(
     new Set(
-      products
+      filterOptionsProducts
         .flatMap((p: Product) => {
           if (p.categories && p.categories.length > 0) {
             return p.categories.map((cat: { name: string }) => cat.name)
@@ -128,7 +167,7 @@ export default function ProductListingPage() {
   ]
 
   const hasActiveFilters =
-    filterBrand.length > 0 || filterCategory.length > 0 || filterGender !== ''
+    filterBrand.length > 0 || filterCategory.length > 0 || filterGender.length > 0
 
   // Render the filter content (reused in both desktop sidebar and mobile sheet)
   const renderFilterContent = () => (
@@ -158,7 +197,11 @@ export default function ProductListingPage() {
         title="Gênero"
         inputType="checkbox"
         options={genderOptions}
-        onChange={(val) => setFilterGender(val)}
+        onChange={(val, checked) => {
+          if (checked)
+            setFilterGender((s) => Array.from(new Set([...s, val])))
+          else setFilterGender((s) => s.filter((i) => i !== val))
+        }}
       />
     </>
   )

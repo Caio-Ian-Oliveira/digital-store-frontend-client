@@ -12,6 +12,7 @@ export interface ApiProduct {
   enabled: boolean
   stock: number
   use_in_menu: boolean
+  brand: string 
   images: { id: number; path: string; enabled: boolean }[]
   options: {
     id: number
@@ -48,6 +49,7 @@ export function mapApiProduct(raw: ApiProduct): Product {
     priceDiscount: raw.price_with_discount || undefined,
     description: raw.description || undefined,
     category: raw.categories?.[0]?.name || undefined,
+    brand: raw.brand, // Adicionado
     images: enabledImages,
     options: mappedOptions,
     categories: raw.categories || []
