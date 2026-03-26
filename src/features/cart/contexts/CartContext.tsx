@@ -112,10 +112,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
         return
       }
 
-      // Update Otimista: Adiciona ao estado local antes da resposta da API
-      // para que o usuário veja a mudança imediatamente.
+      // Aplica atualização otimista no estado local antes da resposta da API.
       setItems((prev) => {
-        // Verifica se esta combinação exata já existe no estado local
+        // Reutiliza o item existente quando produto/cor/tamanho já estiver no carrinho.
         const existingInfo = prev.find(
           (item) =>
             item.product.id === product.id
@@ -129,7 +128,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
               : item
           )
         }
-        // Usa um ID temporário até que o fetchCart retorne os IDs reais da API
+        // Usa ID temporário até sincronizar novamente com os IDs persistidos no backend.
         return [
           ...prev,
           {
@@ -149,11 +148,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
           selected_color: selectedColor,
           selected_size: selectedSize
         })
-        // Sincroniza o estado com o banco de dados (recupera os IDs reais gerados pela API)
+        // Sincroniza o estado local com o backend após a operação.
         await fetchCart()
       } catch (error) {
         console.error('Erro ao adicionar produto:', error)
-        // Em caso de erro, re-sincroniza com o banco para reverter o update otimista
+        // Reverte o estado otimista ao recarregar os dados do backend em caso de falha.
         await fetchCart()
       }
     },

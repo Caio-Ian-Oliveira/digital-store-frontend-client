@@ -17,8 +17,7 @@ const queryClient = new QueryClient({
   }
 })
 
-// Ponto de entrada do DOM do navegador.
-// Monta o React no elemento com ID 'root'.
+// Ponto de entrada da aplicação React no elemento `root`.
 // biome-ignore lint/style/noNonNullAssertion: ignore
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

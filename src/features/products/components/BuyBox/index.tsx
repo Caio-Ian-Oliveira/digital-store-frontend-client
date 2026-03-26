@@ -170,7 +170,7 @@ export function BuyBox({
 
       {/* Botões de Ação */}
       <div className="flex flex-col sm:flex-row gap-3">
-        {/* Comprar → adiciona ao carrinho e navega */}
+        {/* Fluxo de compra imediata: adiciona item e redireciona para checkout. */}
         <button
           type="button"
           onClick={handleBuyClick}
@@ -179,7 +179,7 @@ export function BuyBox({
           Comprar
         </button>
 
-        {/* Adicionar ao carrinho → adiciona e permanece na página */}
+        {/* Adiciona item ao carrinho mantendo o usuário na página atual. */}
         <button
           type="button"
           onClick={handleAddToCart}

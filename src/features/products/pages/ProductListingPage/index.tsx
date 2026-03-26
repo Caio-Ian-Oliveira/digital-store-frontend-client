@@ -34,13 +34,12 @@ export default function ProductListingPage() {
   const [sortOrder, setSortOrder] = useState<'lowest' | 'highest'>('lowest')
   const [page, setPage] = useState(1)
 
-  // Reseta para a página 1 ao mudar qualquer filtro
+  // Reinicia a paginação quando os critérios de busca mudam.
   useEffect(() => {
     setPage(1)
   }, [filter, categoryParam, filterBrand, filterCategory, filterGender])
 
-  // Query para buscar opções de filtro (marcas e categorias) sem aplicar marca/categoria específica
-  // Isso garante que todas as opções apareçam mesmo quando filtrando
+  // Busca uma amostra ampla para derivar opções de filtro (marca/categoria) da interface.
   const {
     data: filterOptionsResponse
   } = useQuery({
@@ -80,17 +79,17 @@ export default function ProductListingPage() {
       sortOrder
     ],
     queryFn: async () => {
-      // Mock de delay para visualização do Skeleton Loading (opcional)
+      // Simula uma latência curta para exibir transições de carregamento de forma consistente.
       await new Promise((resolve) => setTimeout(resolve, 300))
 
-      // Objeto de parâmetros dinâmicos para a API
+      // Monta os parâmetros dinâmicos enviados para a API.
       // biome-ignore lint/suspicious/noExplicitAny: Options can be very dynamic based on backend typing
       const options: any = {
         page: page,
         limit: 12
       }
 
-      // Aplica filtros se existirem
+      // Aplica filtros selecionados pelo usuário.
       if (filter) options.match = filter
       else if (categoryParam) options.match = categoryParam
       if (filterGender.length > 0) {
@@ -101,7 +100,7 @@ export default function ProductListingPage() {
         options.brand = filterBrand.join(',')
       }
 
-      // Converter filterCategory (nomes) para category_ids (IDs)
+      // Converte nomes de categoria selecionados para IDs esperados pela API.
       if (filterCategory.length > 0) {
         const categoryIds = filterCategory
           .map((name) => categoryMap.get(name))
@@ -111,10 +110,10 @@ export default function ProductListingPage() {
         }
       }
 
-      // Chamada real ao Service que comunica com o Backend
+      // Executa a busca no serviço HTTP de produtos.
       const res = await getProducts(options)
 
-      // Ordenação local (Client-side) como fallback ou complemento
+      // Aplica ordenação local para complementar o comportamento da listagem.
       if (sortOrder === 'lowest') {
         res.data.sort((a, b) => (a.price ?? 0) - (b.price ?? 0))
       } else if (sortOrder === 'highest') {
@@ -123,17 +122,17 @@ export default function ProductListingPage() {
 
       return res
     },
-    placeholderData: keepPreviousData // Mantém dados antigos enquanto busca novos para evitar flickering
+    placeholderData: keepPreviousData // Mantém resultados anteriores enquanto a próxima página/filtro é carregada.
   })
 
   const products = response?.data || []
   // Total count defined by the backend
   const productCount: number = response?.total ?? products.length
 
-  // Usar os produtos de filterOptionsResponse para derivar as opções de filtro
+  // Deriva as opções de filtros a partir da resposta sem filtros específicos.
   const filterOptionsProducts = filterOptionsResponse?.data || []
 
-  // Criar mapa de nome -> id para conversão de filtros de categoria
+  // Mapeia nome de categoria para ID usado pela API no filtro `category_ids`.
   const categoryMap = new Map<string, string>()
   filterOptionsProducts.forEach((p: Product) => {
     if (p.categories && p.categories.length > 0) {

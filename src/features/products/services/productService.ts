@@ -49,7 +49,7 @@ export function mapApiProduct(raw: ApiProduct): Product {
     priceDiscount: raw.price_with_discount || undefined,
     description: raw.description || undefined,
     category: raw.categories?.[0]?.name || undefined,
-    brand: raw.brand, // Adicionado
+    brand: raw.brand,
     images: enabledImages,
     options: mappedOptions,
     categories: raw.categories || []
@@ -87,14 +87,13 @@ export const getProducts = async (
     category_ids: options?.category_ids?.join(',')
   }
 
-  // Adiciona filtros de preço se existirem
+  // Inclui faixa de preço no formato esperado pela API.
   if (options?.price_range) {
     params['price_range[min]'] = options.price_range.min
     params['price_range[max]'] = options.price_range.max
   }
 
-  // Adiciona filtros de opções dinâmicas (ex: cor, tamanho)
-  // O backend espera no formato: options[Tamanho]=G&options[Cor]=Preto
+  // Inclui filtros dinâmicos no formato `options[chave]=valor1,valor2`.
   if (options?.options) {
     Object.entries(options.options).forEach(([key, values]) => {
       params[`options[${key}]`] = values.join(',')

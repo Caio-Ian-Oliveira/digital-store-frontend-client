@@ -25,7 +25,7 @@ export default function MyPaymentMethodsPage() {
           pagamento vinculadas à sua conta.
         </p>
 
-        {/* Demo Card */}
+        {/* Cartão de exemplo para representar um método já salvo. */}
         <div className="flex items-center justify-between border border-light-gray-3 rounded-lg p-5">
           <div className="flex items-center gap-4">
             <div className="w-12 h-8 bg-light-gray-3 rounded flex items-center justify-center">
