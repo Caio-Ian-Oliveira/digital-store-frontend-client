@@ -102,16 +102,16 @@ const calculateCursorPosition = (
   newValue: string,
   oldCursorPosition: number
 ): number => {
-  // Se o novo valor é menor, mantém a posição proporcional
+  // Em remoções, mantém o cursor dentro do novo limite de caracteres.
   if (newValue.length < oldValue.length) {
     return Math.min(oldCursorPosition, newValue.length)
   }
 
-  // Se o novo valor é maior, ajusta para os caracteres de máscara adicionados
+  // Em inserções, desloca o cursor considerando os caracteres de máscara inseridos.
   let newCursorPosition = oldCursorPosition
   const lengthDifference = newValue.length - oldValue.length
 
-  // Se adicionamos caracteres de máscara, move o cursor para frente
+  // Avança o cursor apenas quando houve expansão do valor formatado.
   if (lengthDifference > 0) {
     newCursorPosition += lengthDifference
   }

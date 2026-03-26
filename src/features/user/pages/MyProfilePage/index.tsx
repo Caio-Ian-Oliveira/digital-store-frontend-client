@@ -17,7 +17,6 @@ export default function MyProfilePage() {
 
       <div className="text-dark-gray-3 text-sm">
         Bem-vindo ao seu painel!
-        {/* Adicionar conteúdo da dashboard do perfil aqui futuramente */}
       </div>
     </ProfileLayout>
   )

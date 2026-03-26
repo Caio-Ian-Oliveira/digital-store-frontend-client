@@ -3,7 +3,6 @@
  * Centraliza todos os componentes reutilizáveis (layout, UI e inputs mascarados).
  */
 
-// Componentes de layout
 export * from './Footer'
 export * from './Gallery'
 export * from './Header'
@@ -15,7 +14,6 @@ export * from './RouterLink'
 export * from './ScrollToTop'
 export * from './Section'
 
-// Componentes de UI base (Shadcn/Radix)
 export * from './ui/button'
 export * from './ui/carousel'
 export * from './ui/cep-input'
