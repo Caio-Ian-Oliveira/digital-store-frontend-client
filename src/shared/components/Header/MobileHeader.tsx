@@ -157,13 +157,15 @@ export const MobileHeader = ({
               </SheetContent>
             </Sheet>
 
-            <RouterLink to="/" className="flex-shrink-0">
-              <img
-                src={logoHeader}
-                alt="Digital Store"
-                className="h-7 w-auto"
-              />
-            </RouterLink>
+            <div className="flex-1 flex justify-center">
+              <RouterLink to="/" className="flex-shrink-0">
+                <img
+                  src={logoHeader}
+                  alt="Digital Store"
+                  className="h-7 w-auto"
+                />
+              </RouterLink>
+            </div>
 
             <div className="flex items-center">
               <button

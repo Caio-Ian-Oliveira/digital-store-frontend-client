@@ -82,7 +82,7 @@ export function BuyBox({
     <div className="space-y-6">
       {/* Cabeçalho: Nome, Referência e Avaliação */}
       <div className="flex flex-col gap-2">
-        <h1 className="text-xl lg:text-[32px] font-bold text-dark-gray leading-tight">
+        <h1 className="text-[22px] lg:text-[32px] font-bold text-dark-gray leading-[1.2] lg:leading-tight">
           {name}
         </h1>
         {reference && (
