@@ -48,7 +48,7 @@ export function ProductCard({
         <img
           src={image}
           alt={name}
-          className="w-full h-[75%] object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.03)] transition-transform duration-300 group-hover:scale-105"
+          className="max-w-[90%] max-h-[90%] object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.03)] transition-transform duration-300 group-hover:scale-105"
         />
 
         {/* Badge de Desconto */}

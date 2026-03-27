@@ -94,8 +94,8 @@ export default function ProductViewPage() {
   const productImages = getProductImages()
 
   return (
-    <div className="max-w-7xl mx-auto px-4 lg:px-8 py-6 lg:py-12 space-y-6 lg:space-y-8">
-      {/* Breadcrumb */}
+    <div className="max-w-7xl mx-auto px-5 lg:px-8 py-6 lg:py-12 space-y-6 lg:space-y-8 overflow-x-hidden">
+        {/* Breadcrumb */}
       <nav
         aria-label="Breadcrumb"
         className="text-xs lg:text-sm text-dark-gray-3 overflow-x-auto"
@@ -116,7 +116,9 @@ export default function ProductViewPage() {
             </RouterLink>
           </li>
           <li>/</li>
-          <li className="text-dark-gray-2 font-medium">{product.name}</li>
+          <li className="text-dark-gray-2 font-medium truncate max-w-[120px] sm:max-w-none">
+            {product.name}
+          </li>
         </ol>
       </nav>
 
@@ -129,7 +131,7 @@ export default function ProductViewPage() {
           width="100%"
           height="var(--gallery-height)"
           radius="4px"
-          className="w-full [--gallery-height:302px] lg:[--gallery-height:570px]"
+          className="w-full [--gallery-height:280px] sm:[--gallery-height:350px] lg:[--gallery-height:570px]"
           objectFit="contain"
           imagePadding="p-4 lg:p-8"
         >
@@ -210,7 +212,7 @@ export default function ProductViewPage() {
         titleAlign="left"
         link={{ text: 'Ver todos', href: '/products' }}
       >
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 sm:gap-4 md:gap-6 lg:gap-x-8 lg:gap-y-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
           {relatedProducts.map((relatedProduct) => (
             <ProductCard
               key={relatedProduct.id}
