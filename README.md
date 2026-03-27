@@ -1,4 +1,4 @@
-# 🛒 Digital Store — Projeto Front-end (Stable Version)
+# 🛒 Digital Store — Projeto Front-end (Stable Version V1)
 
 <div align="center">
   <img src="src/assets/images/logo-header.svg" alt="Digital Store Logo" height="50" />
