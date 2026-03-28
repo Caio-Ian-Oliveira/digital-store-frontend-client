@@ -236,12 +236,18 @@ src/
    npm install
    ```
 
-3. **Inicie o servidor de desenvolvimento:**
+3. **Configure as Variáveis de Ambiente:**
+   Copie o arquivo de exemplo para um novo arquivo `.env` (a URL apontada será a da sua API local):
+   ```bash
+   cp .env.example .env
+   ```
+
+4. **Inicie o servidor de desenvolvimento:**
    ```bash
    npm run dev
    ```
 
-4. **Acesse no navegador:**
+5. **Acesse no navegador:**
    ```
    http://localhost:5173
    ```
