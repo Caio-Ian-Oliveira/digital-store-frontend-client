@@ -18,7 +18,7 @@ export const HeaderNavLink = ({
   variant = 'desktop'
 }: HeaderNavLinkProps) => {
   const desktopClassName = ({ isActive }: { isActive: boolean }) =>
-    `relative inline-block py-3 text-base font-normal text-dark-gray-2 no-underline hover:text-primary transition-colors ${
+    `relative inline-block py-2 text-base font-normal text-dark-gray-2 no-underline hover:text-primary transition-colors ${
       isActive
         ? 'text-primary font-bold after:content-[""] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[3px] after:bg-primary'
         : ''

@@ -23,7 +23,7 @@ export const DesktopHeader = ({
   onCartClose
 }: DesktopHeaderProps) => {
   return (
-    <div className="hidden lg:block py-6 bg-white">
+    <div className="hidden lg:block py-4 bg-white">
       <div className="max-w-[1440px] mx-auto px-6 xl:px-[100px] flex items-center gap-10">
         <Logo />
         {!isAuthPage && <DesktopSearch />}
