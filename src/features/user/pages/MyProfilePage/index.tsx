@@ -15,9 +15,7 @@ export default function MyProfilePage() {
         </p>
       </div>
 
-      <div className="text-dark-gray-3 text-sm">
-        Bem-vindo ao seu painel!
-      </div>
+      <div className="text-dark-gray-3 text-sm">Bem-vindo ao seu painel!</div>
     </ProfileLayout>
   )
 }

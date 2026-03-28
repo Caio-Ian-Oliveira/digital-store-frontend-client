@@ -100,6 +100,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
     fetchCart()
   }, [fetchCart])
 
+  /**
+   * Adiciona um produto ao carrinho. Se o item (mesmo produto, cor e tamanho)
+   * já existir, apenas incrementa a quantidade.
+   *
+   * @param product - Objeto do produto a ser adicionado.
+   * @param quantity - Quantidade inicial (padrão 1).
+   * @param selectedColor - Cor selecionada pelo usuário.
+   * @param selectedSize - Tamanho selecionado pelo usuário.
+   * @returns {Promise<void>} Sincroniza com a API após a atualização local.
+   */
   const addToCart = useCallback(
     async (
       product: Product,
@@ -159,6 +169,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
     [isAuthenticated, fetchCart, navigate]
   )
 
+  /**
+   * Remove um item específico do carrinho através do seu ID único (item_id da API).
+   *
+   * @param itemId - ID do item no carrinho.
+   * @returns {Promise<void>} Sincroniza com a API em caso de erro.
+   */
   const removeFromCart = useCallback(
     async (itemId: string) => {
       if (!isAuthenticated) return
@@ -178,6 +194,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
     [isAuthenticated, fetchCart]
   )
 
+  /**
+   * Atualiza a quantidade de um item já presente no carrinho.
+   *
+   * @param itemId - ID do item no carrinho.
+   * @param quantity - Nova quantidade (mínimo 1).
+   * @returns {Promise<void>} Sincroniza com a API para persistência.
+   */
   const updateQuantity = useCallback(
     async (itemId: string, quantity: number) => {
       if (!isAuthenticated || quantity < 1) return
@@ -197,6 +220,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
     [isAuthenticated, fetchCart]
   )
 
+  /**
+   * Remove todos os itens do carrinho e limpa cupons e frete.
+   *
+   * @returns {Promise<void>} Limpa o estado local e chama a API de limpeza total.
+   */
   const clearCart = useCallback(async () => {
     if (!isAuthenticated) return
 
@@ -293,6 +321,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>
 }
 
+/**
+ * Hook customizado para acessar o contexto do carrinho de qualquer lugar da aplicação.
+ *
+ * @returns {CartContextType} Objeto contendo itens, funções de manipulação e cálculos de totais.
+ * @throws {Error} Se usado fora de um <CartProvider />.
+ */
 export function useCart() {
   const context = useContext(CartContext)
   if (!context) {
