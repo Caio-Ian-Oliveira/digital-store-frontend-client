@@ -1,8 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { useNavigate, useParams } from 'react-router-dom'
-import { z } from 'zod'
 import { api } from '@/core'
 import { useAuth } from '@/features/auth'
 import { useCart } from '@/features/cart'
@@ -15,6 +10,11 @@ import {
 import { getProductById, type Product } from '@/features/products'
 import { Button, Section } from '@/shared/components'
 import { formatPrice, removeNonNumbers } from '@/shared/utils'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useNavigate, useParams } from 'react-router-dom'
+import { z } from 'zod'
 
 // --- ZOD SCHEMA ---
 const checkoutSchema = z.object({
@@ -31,7 +31,10 @@ const checkoutSchema = z.object({
   address: z.string().nonempty('Endereço é obrigatório'),
   neighborhood: z.string().nonempty('Bairro é obrigatório'),
   city: z.string().nonempty('Cidade é obrigatória'),
-  cep: z.string().nonempty('CEP é obrigatório'),
+  cep: z
+    .string()
+    .min(8, 'O CEP deve ter 8 dígitos.')
+    .nonempty('CEP é obrigatório'),
   complement: z.string().optional(),
   paymentMethod: z.enum(['credit-card', 'boleto'])
 })

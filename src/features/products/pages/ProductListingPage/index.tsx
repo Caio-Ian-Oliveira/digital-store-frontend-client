@@ -43,11 +43,7 @@ export default function ProductListingPage() {
   const {
     data: filterOptionsResponse
   } = useQuery({
-    queryKey: [
-      'products-filter-options',
-      filter,
-      categoryParam
-    ],
+    queryKey: ['products-filter-options', filter],
     queryFn: async () => {
       const options: any = {
         page: 1,
@@ -55,12 +51,37 @@ export default function ProductListingPage() {
       }
 
       if (filter) options.match = filter
-      else if (categoryParam) options.match = categoryParam
 
       return getProducts(options)
     },
     placeholderData: keepPreviousData
   })
+
+  // Mapeia nome de categoria para ID usado pela API no filtro `category_ids`.
+  const categoryMap = useState(() => new Map<string, string>())[0]
+  const filterOptionsProducts = filterOptionsResponse?.data || []
+
+  useEffect(() => {
+    if (filterOptionsProducts.length > 0) {
+      filterOptionsProducts.forEach((p: Product) => {
+        if (p.categories && p.categories.length > 0) {
+          p.categories.forEach((cat: { id: string; name: string }) => {
+            categoryMap.set(cat.name, cat.id)
+          })
+        }
+      })
+    }
+  }, [filterOptionsProducts, categoryMap])
+
+  // Sincroniza o parâmetro `category` da URL com o estado de filtros laterais.
+  useEffect(() => {
+    if (categoryParam && categoryMap.has(categoryParam)) {
+      setFilterCategory((prev) => {
+        if (prev.includes(categoryParam)) return prev
+        return [...prev, categoryParam]
+      })
+    }
+  }, [categoryParam, categoryMap])
 
   const {
     data: response,
@@ -91,7 +112,9 @@ export default function ProductListingPage() {
 
       // Aplica filtros selecionados pelo usuário.
       if (filter) options.match = filter
-      else if (categoryParam) options.match = categoryParam
+      else if (categoryParam && filterCategory.length === 0) {
+        options.match = categoryParam
+      }
       if (filterGender.length > 0) {
         const genderValues = filterGender.map(g => g === 'Unissex' ? 'Unisex' : g)
         options.gender = genderValues.join(',')
@@ -130,17 +153,6 @@ export default function ProductListingPage() {
   const productCount: number = response?.total ?? products.length
 
   // Deriva as opções de filtros a partir da resposta sem filtros específicos.
-  const filterOptionsProducts = filterOptionsResponse?.data || []
-
-  // Mapeia nome de categoria para ID usado pela API no filtro `category_ids`.
-  const categoryMap = new Map<string, string>()
-  filterOptionsProducts.forEach((p: Product) => {
-    if (p.categories && p.categories.length > 0) {
-      p.categories.forEach((cat: { id: string; name: string }) => {
-        categoryMap.set(cat.name, cat.id)
-      })
-    }
-  })
 
   const brandOptions = Array.from(
     new Set(filterOptionsProducts.map((p: Product) => p.brand).filter(Boolean))
