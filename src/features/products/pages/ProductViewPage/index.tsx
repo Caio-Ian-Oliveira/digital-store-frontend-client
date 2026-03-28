@@ -95,7 +95,7 @@ export default function ProductViewPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-5 lg:px-8 py-6 lg:py-12 space-y-6 lg:space-y-8 overflow-x-hidden">
-        {/* Breadcrumb */}
+      {/* Breadcrumb */}
       <nav
         aria-label="Breadcrumb"
         className="text-xs lg:text-sm text-dark-gray-3 overflow-x-auto"

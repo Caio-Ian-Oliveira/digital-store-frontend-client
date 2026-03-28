@@ -5,15 +5,30 @@ import Logo from '../Logo'
 import { DesktopSearch } from './DesktopSearch'
 import { UserProfileMenu } from './UserProfileMenu'
 
+/**
+ * Props do componente DesktopHeader.
+ */
 interface DesktopHeaderProps {
+  /** Indica se a página atual é de autenticação (simplifica o header). */
   isAuthPage: boolean
+  /** Indica se o usuário está autenticado (exibe menu de perfil). */
   isAuthenticated: boolean
+  /** Quantidade total de itens no carrinho (exibida como badge). */
   itemCount: number
+  /** Controla se o modal do carrinho está aberto. */
   cartModalOpen: boolean
+  /** Callback para alternar (abrir/fechar) o modal do carrinho. */
   onCartToggle: () => void
+  /** Callback para fechar o modal do carrinho. */
   onCartClose: () => void
 }
 
+/**
+ * Componente de cabeçalho para a versão desktop (oculto em mobile via `hidden lg:block`).
+ * Exibe o logo, campo de busca, atalho para o carrinho e menu de usuário.
+ *
+ * @param props - {@link DesktopHeaderProps}
+ */
 export const DesktopHeader = ({
   isAuthPage,
   isAuthenticated,

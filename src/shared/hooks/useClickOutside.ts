@@ -1,7 +1,12 @@
 import { type RefObject, useEffect } from 'react'
 
 /**
- * Hook para detectar cliques fora de um elemento.
+ * Hook que detecta cliques fora de um elemento referenciado e chama um handler.
+ * Ütil para fechar modais, dropdowns ou menus ao clicar fora deles.
+ *
+ * @param ref - Ref do elemento que define a "borda" do clique-fora.
+ * @param handler - Função chamada ao detectar um clique externo.
+ * @param enabled - Se `false`, o listener não é registrado (padrão `true`).
  */
 export function useClickOutside(
   ref: RefObject<HTMLElement | null>,

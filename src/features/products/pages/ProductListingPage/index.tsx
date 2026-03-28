@@ -40,9 +40,7 @@ export default function ProductListingPage() {
   }, [filter, categoryParam, filterBrand, filterCategory, filterGender])
 
   // Busca uma amostra ampla para derivar opções de filtro (marca/categoria) da interface.
-  const {
-    data: filterOptionsResponse
-  } = useQuery({
+  const { data: filterOptionsResponse } = useQuery({
     queryKey: ['products-filter-options', filter],
     queryFn: async () => {
       const options: any = {
@@ -116,7 +114,9 @@ export default function ProductListingPage() {
         options.match = categoryParam
       }
       if (filterGender.length > 0) {
-        const genderValues = filterGender.map(g => g === 'Unissex' ? 'Unisex' : g)
+        const genderValues = filterGender.map((g) =>
+          g === 'Unissex' ? 'Unisex' : g
+        )
         options.gender = genderValues.join(',')
       }
       if (filterBrand.length > 0) {
@@ -178,7 +178,9 @@ export default function ProductListingPage() {
   ]
 
   const hasActiveFilters =
-    filterBrand.length > 0 || filterCategory.length > 0 || filterGender.length > 0
+    filterBrand.length > 0
+    || filterCategory.length > 0
+    || filterGender.length > 0
 
   // Render the filter content (reused in both desktop sidebar and mobile sheet)
   const renderFilterContent = () => (
@@ -212,8 +214,7 @@ export default function ProductListingPage() {
         options={genderOptions}
         selectedValues={filterGender}
         onChange={(val, checked) => {
-          if (checked)
-            setFilterGender((s) => Array.from(new Set([...s, val])))
+          if (checked) setFilterGender((s) => Array.from(new Set([...s, val])))
           else setFilterGender((s) => s.filter((i) => i !== val))
         }}
       />

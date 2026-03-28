@@ -12,7 +12,7 @@ export interface ApiProduct {
   enabled: boolean
   stock: number
   use_in_menu: boolean
-  brand: string 
+  brand: string
   images: { id: number; path: string; enabled: boolean }[]
   options: {
     id: number
@@ -74,6 +74,9 @@ export interface GetProductsOptions {
 
 /**
  * Busca todos os produtos da API com suporte a filtros avançados.
+ *
+ * @param options - Opções de paginação, busca e filtros (marca, gênero, categorias, preço, etc).
+ * @returns {Promise<SearchResponse<Product>>} Objeto contendo os produtos mapeados e metadados de paginação.
  */
 export const getProducts = async (
   options?: GetProductsOptions
@@ -113,6 +116,9 @@ export const getProducts = async (
 
 /**
  * Busca um produto específico pelo seu ID ou Slug.
+ *
+ * @param id - ID ou Slug do produto.
+ * @returns {Promise<Product | undefined>} O produto mapeado ou undefined em caso de erro.
  */
 export const getProductById = async (
   id: string
@@ -129,6 +135,10 @@ export const getProductById = async (
 /**
  * Busca produtos relacionados a um produto específico.
  * Atualmente simplificado para buscar os primeiros produtos da mesma categoria.
+ *
+ * @param productId - ID do produto de referência.
+ * @param limit - Quantidade máxima de produtos relacionados (padrão 4).
+ * @returns {Promise<Product[]>} Lista de produtos relacionados.
  */
 export const getRelatedProducts = async (
   productId: string,

@@ -9,7 +9,10 @@ export const api = axios.create({
   withCredentials: true
 })
 
-// Interceptador para tratar erros globais (ex: 401 Unauthorized)
+/**
+ * Interceptador para tratar erros globais (ex: 401 Unauthorized).
+ * Se o backend retornar 401, a sessão expirou ou é inválida, limpamos o storage e redirecionamos se necessário.
+ */
 api.interceptors.response.use(
   (response) => response,
   (error) => {
