@@ -12,6 +12,13 @@ import { getStatusInfo, type Order } from '@/features/orders'
 
 /* ─── Helpers ─── */
 
+/**
+ * Formata um ID de pedido (UUID) para exibir apenas os 10 primeiros dígitos numéricos.
+ * Resulta em um número de pedido legível e compacto para o usuário.
+ *
+ * @param id - ID completo do pedido (UUID ou similar).
+ * @returns String com até 10 dígitos numéricos extraídos do ID.
+ */
 function formatOrderId(id: string) {
   const digits = id.replace(/\D/g, '')
   return digits.slice(0, 10) || id.slice(0, 10)
@@ -19,6 +26,12 @@ function formatOrderId(id: string) {
 
 /* ─── Order Row ─── */
 
+/**
+ * Componente de linha de pedido para exibir um item da lista de pedidos do usuário.
+ * Renderiza thumbnail, nome do produto, número do pedido, status e link para detalhes.
+ *
+ * @param order - Objeto do pedido com itens e status.
+ */
 function OrderRow({ order }: { order: Order }) {
   const firstItem = order.items[0]
   const statusInfo = getStatusInfo(order.status)
@@ -84,6 +97,10 @@ function OrderRow({ order }: { order: Order }) {
 
 /* ─── Page ─── */
 
+/**
+ * Página de listagem de pedidos do usuário autenticado.
+ * Busca pedidos paginados da API via React Query e exibe em ordem cronológica decrescente.
+ */
 export default function MyOrdersPage() {
   const { isAuthenticated } = useAuth()
   const [page, setPage] = useState(1)

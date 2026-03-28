@@ -2,7 +2,9 @@ import type { ChangeEvent } from 'react'
 import { formatCEP, formatCPF, formatPhone, removeNonNumbers } from '../utils'
 
 /**
- * Hook para aplicar máscara de CPF
+ * Hook para aplicar máscara de CPF (000.000.000-00) em inputs.
+ *
+ * @returns {Object} Funções applyMask e getCleanValue.
  */
 export const useCPFMask = () => {
   const applyMask = (e: ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +35,9 @@ export const useCPFMask = () => {
 }
 
 /**
- * Hook para aplicar máscara de telefone
+ * Hook para aplicar máscara de telefone ((00) 00000-0000) em inputs.
+ *
+ * @returns {Object} Funções applyMask e getCleanValue.
  */
 export const usePhoneMask = () => {
   const applyMask = (e: ChangeEvent<HTMLInputElement>) => {
@@ -64,7 +68,9 @@ export const usePhoneMask = () => {
 }
 
 /**
- * Hook para aplicar máscara de CEP
+ * Hook para aplicar máscara de CEP (00000-000) em inputs.
+ *
+ * @returns {Object} Funções applyMask e getCleanValue.
  */
 export const useCEPMask = () => {
   const applyMask = (e: ChangeEvent<HTMLInputElement>) => {
@@ -95,7 +101,12 @@ export const useCEPMask = () => {
 }
 
 /**
- * Calcula a nova posição do cursor após aplicar a máscara
+ * Calcula a nova posição do cursor após aplicar a máscara, evitando saltos indesejados.
+ *
+ * @param oldValue Valor antes da mudança.
+ * @param newValue Valor após a máscara.
+ * @param oldCursorPosition Posição original do cursor.
+ * @returns Nova posição calculada.
  */
 const calculateCursorPosition = (
   oldValue: string,

@@ -1,3 +1,8 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useNavigate, useParams } from 'react-router-dom'
+import { z } from 'zod'
 import { api } from '@/core'
 import { useAuth } from '@/features/auth'
 import { useCart } from '@/features/cart'
@@ -10,13 +15,11 @@ import {
 import { getProductById, type Product } from '@/features/products'
 import { Button, Section } from '@/shared/components'
 import { formatPrice, removeNonNumbers } from '@/shared/utils'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { useNavigate, useParams } from 'react-router-dom'
-import { z } from 'zod'
 
-// --- ZOD SCHEMA ---
+/**
+ * Schema de validação Zod para o formulário de checkout.
+ * Valida informações pessoais, endereço de entrega e método de pagamento.
+ */
 const checkoutSchema = z.object({
   fullName: z
     .string()
@@ -101,6 +104,13 @@ export default function CheckoutPage() {
 
   const isLoading = id ? !singleProduct : false
 
+  /**
+   * Handler de submissão do formulário de checkout.
+   * Envia os dados formatados para a API de pedidos e redireciona para a tela de sucesso.
+   * Remove números de máscara do CPF, telefone e CEP antes de enviar ao backend.
+   *
+   * @param data - Dados validados pelo schema Zod.
+   */
   const onSubmit = async (data: CheckoutFormData) => {
     setSubmitError(null)
     setIsSubmitting(true)

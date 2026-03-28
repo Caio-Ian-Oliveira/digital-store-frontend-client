@@ -6,9 +6,7 @@
 
   ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
   ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript&logoColor=white)
-  ![Vite](https://img.shields.io/badg
-  
-  e/Vite-7-646CFF?logo=vite&logoColor=white)
+  ![Vite](https://img.shields.io/badge/Vite-7-646CFF?logo=vite&logoColor=white)
   ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white)
   ![Biome](https://img.shields.io/badge/Biome-2.3-60A5FA?logo=biome&logoColor=white)
   ![License](https://img.shields.io/badge/Licença-MIT-green)
@@ -271,6 +269,80 @@ src/
 - `noUnusedVariables: error` e `noUnusedImports: error` — código limpo garantido
 - Organização automática de imports
 - Arquitetura **Feature-Based** para escalabilidade e manutenibilidade
+
+---
+
+## 📋 Diretrizes de Desenvolvimento
+
+Esta seção documenta as **regras obrigatórias de código** adotadas no projeto, garantindo consistência, manutenibilidade e qualidade em todo o codebase.
+
+### 1. 📝 JSDoc Obrigatório
+
+Todo `export` público (função, componente React, hook, interface) **deve** ter um bloco JSDoc descrevendo seu propósito. Para funções, inclua `@param` e `@returns`. Para interfaces, documente campos relevantes com comentários inline.
+
+**Padrão:**
+```ts
+/**
+ * Hook para buscar dados de um produto pelo ID.
+ *
+ * @param id - ID ou slug do produto.
+ * @returns {Promise<Product | undefined>} Produto mapeado ou undefined.
+ */
+export const getProductById = async (id: string): Promise<Product | undefined> => { ... }
+```
+
+### 2. 🔴 Tratamento de Erros Estruturados (API)
+
+Toda chamada de **mutação** (`POST`, `PUT`, `DELETE`) que interage com a API deve:
+1. Capturar erros do Axios com `axios.isAxiosError(error)`.
+2. Relançar `error.response.data.errors` (array do backend) para que formulários possam exibir erros de validação por campo.
+3. Relançar o erro genérico para outros casos.
+
+**Padrão:**
+```ts
+import axios from 'axios'
+
+export const createResource = async (data: Payload) => {
+  try {
+    const response = await api.post('/endpoint', data)
+    return response.data
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.data?.errors) {
+      throw error.response.data.errors // Array de erros validados pelo backend
+    }
+    throw error // Erros de rede ou server error genérico
+  }
+}
+```
+
+> **GETs** não precisam seguir esse padrão — retornem `undefined` ou re-lançem conforme a necessidade da UI.
+
+### 3. 📱 Mobile-First
+
+Todos os componentes devem ser desenvolvidos com abordagem **mobile-first** usando Tailwind CSS:
+- Regras sem prefixo = mobile (padrão).
+- Prefixos `md:`, `lg:`, `xl:` ampliam o layout progressivamente.
+- Nunca usar estilos com `max-width` para esconder elementos em mobile quando `hidden md:block` resolve.
+
+```tsx
+// ✅ Correto — mobile-first
+<div className="flex flex-col md:flex-row gap-4 md:gap-8">
+
+// ❌ Evitar — desktop-first com overrides para mobile
+<div className="flex flex-row gap-8 max-md:flex-col max-md:gap-4">
+```
+
+### 4. 🔒 Tipagem Estrita
+
+- **Proibido `any`** — regra `noExplicitAny: error` ativa no BiomeJS.
+- Prefira `unknown` para erros capturados em `catch`.
+- Interfaces de resposta da API devem ser tipadas explicitamente (ex: `api.get<MinhaInterface>('/rota')`).
+
+### 5. 🧹 Variáveis e Imports
+
+- Sem variáveis ou imports não utilizados (`noUnusedVariables: error`, `noUnusedImports: error`).
+- Imports são organizados automaticamente pelo BiomeJS (`organizeImports: on`).
+- Sempre rode `npm run check` antes de commitar para garantir conformidade.
 
 ---
 

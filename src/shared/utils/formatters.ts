@@ -3,7 +3,10 @@
  */
 
 /**
- * Remove todos os caracteres não numéricos de uma string
+ * Remove todos os caracteres não numéricos de uma string.
+ *
+ * @param value - String de entrada (pode ser null ou undefined).
+ * @returns String contendo apenas dígitos, ou string vazia se falsy.
  */
 export const removeNonNumbers = (value: string | undefined | null): string => {
   if (!value) return ''
@@ -11,7 +14,10 @@ export const removeNonNumbers = (value: string | undefined | null): string => {
 }
 
 /**
- * Aplica máscara de CPF (000.000.000-00)
+ * Aplica máscara de CPF no formato `000.000.000-00`.
+ *
+ * @param value - String com os dígitos do CPF (mascarados ou não).
+ * @returns String formatada com a máscara de CPF.
  */
 export const formatCPF = (value: string): string => {
   const numbers = removeNonNumbers(value)
@@ -25,7 +31,10 @@ export const formatCPF = (value: string): string => {
 }
 
 /**
- * Valida se um CPF é válido (algoritmo oficial)
+ * Valida se um CPF é matematicamente válido (algoritmo dos dígitos verificadores).
+ *
+ * @param cpf - String com o CPF (mascarado ou apenas dígitos).
+ * @returns `true` se válido, `false` caso contrário.
  */
 export const isValidCPF = (cpf: string): boolean => {
   const numbers = removeNonNumbers(cpf)
@@ -58,8 +67,12 @@ export const isValidCPF = (cpf: string): boolean => {
 }
 
 /**
- * Aplica máscara de telefone
- * Formato: (00) 00000-0000 para celular ou (00) 0000-0000 para fixo
+ * Aplica máscara de telefone:
+ * - Fixo: `(00) 0000-0000`
+ * - Celular: `(00) 00000-0000`
+ *
+ * @param value - String com os dígitos do telefone.
+ * @returns String formatada com a máscara aplicada.
  */
 export const formatPhone = (value: string): string => {
   const numbers = removeNonNumbers(value)
@@ -76,7 +89,11 @@ export const formatPhone = (value: string): string => {
 }
 
 /**
- * Valida se um telefone tem formato válido
+ * Valida se um número de telefone tem formato válido.
+ * Aceita celular (11 dígitos com nono dígito) e fixo (10 dígitos).
+ *
+ * @param phone - String com o telefone (mascarado ou apenas dígitos).
+ * @returns `true` se o formato for válido.
  */
 export const isValidPhone = (phone: string): boolean => {
   const numbers = removeNonNumbers(phone)
@@ -95,7 +112,10 @@ export const isValidPhone = (phone: string): boolean => {
 }
 
 /**
- * Aplica máscara de CEP (00000-000)
+ * Aplica máscara de CEP no formato `00000-000`.
+ *
+ * @param value - String com os dígitos do CEP.
+ * @returns String formatada com a máscara de CEP.
  */
 export const formatCEP = (value: string): string => {
   const numbers = removeNonNumbers(value)
@@ -106,7 +126,10 @@ export const formatCEP = (value: string): string => {
 }
 
 /**
- * Valida se um CEP tem formato válido
+ * Valida se um CEP tem exatamente 8 dígitos numéricos.
+ *
+ * @param cep - String com o CEP (mascarado ou apenas dígitos).
+ * @returns `true` se o CEP for válido.
  */
 export const isValidCEP = (cep: string): boolean => {
   const numbers = removeNonNumbers(cep)

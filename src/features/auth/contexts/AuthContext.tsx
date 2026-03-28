@@ -34,11 +34,17 @@ interface AuthContextType {
  * Contexto de Autenticação da Digital Store.
  * Centraliza o estado do usuário logado, persistência no localStorage
  * e métodos de login/logout para toda a aplicação.
+ *
+ * Consumido exclusivamente através do hook `useAuth()`.
  */
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 /**
  * Provider que envolve a aplicação para prover dados de autenticação.
+ * Restaura a sessão do localStorage no primeiro render e sincroniza
+ * automaticamente sempre que o estado do usuário mudar.
+ *
+ * @param children - Árvore React a ser envolvida.
  */
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
@@ -94,6 +100,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 /**
  * Hook customizado para acessar os dados e funções de autenticação.
+ *
+ * @returns {AuthContextType} Objeto com `user`, `setUser`, `isAuthenticated`, `isInitialLoading` e `logout`.
+ * @throws {Error} Se usado fora de um `<AuthProvider />`.
  */
 export const useAuth = () => {
   const context = useContext(AuthContext)
