@@ -187,6 +187,7 @@ export default function ProductListingPage() {
         title="Marca"
         inputType="checkbox"
         options={brandOptions}
+        selectedValues={filterBrand}
         onChange={(val, checked) => {
           if (checked) setFilterBrand((s) => Array.from(new Set([...s, val])))
           else setFilterBrand((s) => s.filter((i) => i !== val))
@@ -197,6 +198,7 @@ export default function ProductListingPage() {
         title="Categoria"
         inputType="checkbox"
         options={categoryOptions}
+        selectedValues={filterCategory}
         onChange={(val, checked) => {
           if (checked)
             setFilterCategory((s) => Array.from(new Set([...s, val])))
@@ -208,6 +210,7 @@ export default function ProductListingPage() {
         title="Gênero"
         inputType="checkbox"
         options={genderOptions}
+        selectedValues={filterGender}
         onChange={(val, checked) => {
           if (checked)
             setFilterGender((s) => Array.from(new Set([...s, val])))
