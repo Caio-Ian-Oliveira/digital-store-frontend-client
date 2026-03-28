@@ -20,7 +20,7 @@ export function DesktopSearch() {
         placeholder="Procurar produto..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="w-full h-[60px] px-6 pr-14 rounded-lg bg-light-gray-3 text-base text-dark-gray-2 placeholder:text-light-gray-2 outline-none"
+        className="w-full h-[50px] px-6 pr-14 rounded-lg bg-light-gray-3 text-base text-dark-gray-2 placeholder:text-light-gray-2 outline-none"
       />
       <button
         type="submit"

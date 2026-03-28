@@ -131,15 +131,15 @@ export default function ProductViewPage() {
           width="100%"
           height="var(--gallery-height)"
           radius="4px"
-          className="w-full [--gallery-height:280px] sm:[--gallery-height:350px] lg:[--gallery-height:570px]"
+          className="w-full [--gallery-height:450px] sm:[--gallery-height:550px] lg:[--gallery-height:650px]"
           objectFit="contain"
-          imagePadding="p-4 lg:p-8"
+          imagePadding="p-0"
         >
           {(slide, index) => (
             <img
               src={slide.src}
               alt={slide.alt || `Slide ${index + 1}`}
-              className="max-w-[85%] max-h-[85%] object-contain product-image-hover-zoom"
+              className="max-w-full max-h-full object-contain product-image-hover-zoom"
               onMouseMove={(e) => {
                 if (window.innerWidth < 1024) return
                 const rect = e.currentTarget.getBoundingClientRect()
